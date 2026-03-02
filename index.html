@@ -435,13 +435,16 @@
   /* ── LOADING SCREEN ── */
   .loader {
     position: fixed; inset: 0; background: var(--black); z-index: 10000;
-    display: flex; align-items: center; justify-content: center;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+    transition: opacity 0.9s ease, visibility 0.9s ease;
   }
   .loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
-  .loader-logo { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: var(--white); animation: loaderPulse 1.5s ease-in-out infinite; }
+  .loader-logo { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 0.35em; text-transform: uppercase; color: var(--white); animation: loaderFadeIn 0.8s ease forwards; opacity: 0; }
   .loader-logo span { color: var(--orange); }
-  @keyframes loaderPulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+  .loader-bar-wrap { width: 120px; height: 1px; background: rgba(255,255,255,0.1); overflow: hidden; }
+  .loader-bar { height: 100%; width: 0; background: var(--orange); animation: loaderProgress 7.5s cubic-bezier(0.4,0,0.2,1) forwards; }
+  @keyframes loaderFadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes loaderProgress { 0%{width:0%} 60%{width:75%} 85%{width:92%} 100%{width:100%} }
 
   /* RESPONSIVE */
   @media (max-width: 1100px) {
@@ -526,6 +529,7 @@
 <!-- LOADER -->
 <div class="loader" id="loader">
   <div class="loader-logo">Meri<span>·</span>dian</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
 </div>
 
 <div class="cursor" id="cursor"></div>
@@ -757,7 +761,7 @@
   // Loader — dismiss after 1s regardless of load state
   const loaderEl = document.getElementById('loader');
   function dismissLoader() { loaderEl.classList.add('done'); }
-  setTimeout(dismissLoader, 1000);
+  setTimeout(dismissLoader, 8000);
   window.addEventListener('load', dismissLoader);
 
   // Custom cursor
