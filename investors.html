@@ -6,145 +6,114 @@
 <title>Investors — MERIDIAN Development</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
-  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-  :root{--black:#0d0d0d;--dark:#1c1c1c;--mid:#555;--gray:#888;--light-gray:#bbb;--border:#e4e4e4;--off-white:#f8f7f5;--white:#fff;--orange:#E8601C;--orange-light:#f0743a;--orange-pale:#fff4ee;--orange-dark:#c44e12;}
-  html{scroll-behavior:smooth;}
-  body{background:var(--white);color:var(--black);font-family:'Poppins',sans-serif;font-weight:300;overflow-x:hidden;}
-  .cursor,.cursor-ring{display:none;}
-  @media(pointer:fine){body{cursor:none;}.cursor{display:block;position:fixed;width:8px;height:8px;background:var(--orange);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}.cursor-ring{display:block;position:fixed;width:34px;height:34px;border:1.5px solid rgba(232,96,28,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.15s ease;}}
-  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
-  .nav-logo{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:var(--black);text-decoration:none;z-index:201;}
-  .nav-logo span{color:var(--orange);}
-  .nav-links{display:flex;gap:36px;list-style:none;}
-  .nav-links a{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;color:var(--mid);text-decoration:none;transition:color 0.25s;}
-  .nav-links a:hover,.nav-links a.active{color:var(--orange);}
-  .nav-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;color:var(--white);background:var(--orange);padding:12px 28px;text-decoration:none;transition:background 0.25s;}
-  .nav-cta:hover{background:var(--orange-dark);}
-  .nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;z-index:201;}
-  .nav-hamburger span{display:block;width:24px;height:2px;background:var(--black);transition:all 0.3s ease;}
-  .nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
-  .nav-hamburger.open span:nth-child(2){opacity:0;}
-  .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
-  .mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:var(--white);z-index:199;flex-direction:column;padding:40px 30px;overflow-y:auto;transform:translateX(100%);transition:transform 0.35s ease;}
-  .mobile-menu.open{transform:translateX(0);}
-  .mobile-menu li{list-style:none;border-bottom:1px solid var(--border);}
-  .mobile-menu li a{display:block;padding:18px 0;font-family:'Montserrat',sans-serif;font-size:16px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--black);text-decoration:none;}
-  .mobile-menu li a:hover{color:var(--orange);}
-  .mobile-menu .mobile-cta{margin-top:32px;background:var(--orange);color:var(--white);padding:16px;text-align:center;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;text-decoration:none;display:block;}
-  .section-tag{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;font-weight:700;color:var(--orange);margin-bottom:18px;display:block;}
-  .section-title{font-family:'Montserrat',sans-serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;line-height:1.1;letter-spacing:-0.02em;}
-  .section-title em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;color:var(--orange);}
-  .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.75s ease,transform 0.75s ease;}
-  .reveal.visible{opacity:1;transform:translateY(0);}
-
-  /* HERO */
-  .page-hero{margin-top:72px;background:var(--black);padding:100px 60px;position:relative;overflow:hidden;}
-  .hero-bg-text{position:absolute;right:-40px;top:50%;transform:translateY(-50%);font-family:'Montserrat',sans-serif;font-size:200px;font-weight:700;color:rgba(255,255,255,0.02);line-height:1;pointer-events:none;white-space:nowrap;}
-  .page-hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;z-index:1;}
-  .page-hero-label{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.38em;text-transform:uppercase;font-weight:700;color:var(--orange);display:flex;align-items:center;gap:14px;margin-bottom:20px;}
-  .page-hero-label::before{content:'';width:28px;height:2px;background:var(--orange);display:block;}
-  .page-hero h1{font-family:'Montserrat',sans-serif;font-size:clamp(36px,5vw,72px);font-weight:700;line-height:1.05;letter-spacing:-0.02em;color:var(--white);}
-  .page-hero h1 em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;color:var(--orange);}
-  .page-hero-right p{font-size:15px;line-height:1.85;color:rgba(255,255,255,0.5);font-weight:300;margin-bottom:20px;}
-  .page-hero-right p:last-of-type{margin-bottom:36px;}
-  .btn-orange{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;color:var(--white);background:var(--orange);padding:14px 30px;text-decoration:none;display:inline-block;transition:background 0.25s;border:none;cursor:pointer;}
-  .btn-orange:hover{background:var(--orange-dark);}
-
-  /* METRICS */
-  .metrics{background:var(--off-white);padding:80px 60px;}
-  .metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:48px;}
-  .metric-card{background:var(--white);padding:40px 32px;border-top:3px solid var(--border);transition:border-color 0.3s;}
-  .metric-card:hover{border-color:var(--orange);}
-  .metric-num{font-family:'Montserrat',sans-serif;font-size:40px;font-weight:700;color:var(--orange);line-height:1;margin-bottom:8px;}
-  .metric-label{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--black);margin-bottom:8px;}
-  .metric-desc{font-size:12px;line-height:1.6;color:var(--gray);}
-
-  /* INVESTMENT THESIS */
-  .thesis{padding:100px 60px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
-  .thesis-text p{font-size:14px;line-height:1.9;color:var(--gray);margin-top:18px;}
-  .thesis-divider{width:44px;height:3px;background:var(--orange);margin:28px 0;}
-  .thesis-points{margin-top:36px;display:flex;flex-direction:column;gap:0;}
-  .thesis-point{display:flex;gap:16px;padding:18px 0;border-bottom:1px solid var(--border);}
-  .thesis-point:last-child{border-bottom:none;}
-  .tp-icon{width:10px;height:10px;border-radius:50%;background:var(--orange);flex-shrink:0;margin-top:5px;}
-  .tp-title{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:var(--black);margin-bottom:4px;}
-  .tp-desc{font-size:12px;line-height:1.65;color:var(--gray);}
-  .thesis-img{position:relative;}
-  .thesis-img img{width:100%;aspect-ratio:4/5;object-fit:cover;filter:brightness(0.85);}
-  .thesis-img-stat{position:absolute;bottom:-1px;left:0;right:0;background:var(--orange);padding:20px 28px;display:flex;justify-content:space-between;align-items:center;}
-  .tis-label{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.7);}
-  .tis-value{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:700;color:var(--white);}
-
-  /* STRUCTURES */
-  .structures{background:var(--dark);padding:100px 60px;}
-  .structures .section-title{color:var(--white);}
-  .structures-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:52px;}
-  .struct-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);padding:40px 32px;transition:background 0.3s,border-color 0.3s;}
-  .struct-card:hover{background:rgba(232,96,28,0.08);border-color:rgba(232,96,28,0.3);}
-  .struct-icon{font-size:28px;margin-bottom:20px;display:block;}
-  .struct-title{font-family:'Montserrat',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:12px;}
-  .struct-desc{font-size:13px;line-height:1.75;color:rgba(255,255,255,0.45);margin-bottom:24px;}
-  .struct-details{display:flex;flex-direction:column;gap:8px;}
-  .struct-detail{display:flex;gap:8px;font-size:12px;color:rgba(255,255,255,0.35);}
-  .struct-detail::before{content:'—';color:var(--orange);flex-shrink:0;}
-
-  /* TRACK RECORD */
-  .track{padding:100px 60px;background:var(--off-white);}
-  .track-table{margin-top:48px;border:1px solid var(--border);overflow:hidden;}
-  .track-header{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;background:var(--black);padding:14px 24px;gap:16px;}
-  .track-header span{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.5);}
-  .track-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;padding:18px 24px;gap:16px;border-bottom:1px solid var(--border);background:var(--white);transition:background 0.2s;align-items:center;}
-  .track-row:last-child{border-bottom:none;}
-  .track-row:hover{background:var(--orange-pale);}
-  .track-project{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:var(--black);}
-  .track-project span{display:block;font-family:'Poppins',sans-serif;font-size:11px;font-weight:300;color:var(--gray);margin-top:3px;}
-  .track-cell{font-family:'Poppins',sans-serif;font-size:13px;color:var(--mid);}
-  .track-return{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:var(--orange);}
-
-  /* FAQ */
-  .faq{padding:100px 60px;}
-  .faq-header{max-width:560px;margin-bottom:52px;}
-  .faq-list{max-width:800px;}
-  .faq-item{border-bottom:1px solid var(--border);}
-  .faq-question{display:flex;justify-content:space-between;align-items:center;padding:22px 0;cursor:pointer;gap:20px;}
-  .faq-q-text{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:600;color:var(--black);}
-  .faq-icon{width:28px;height:28px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--orange);flex-shrink:0;transition:all 0.3s;font-weight:300;}
-  .faq-item.open .faq-icon{background:var(--orange);color:var(--white);border-color:var(--orange);transform:rotate(45deg);}
-  .faq-answer{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
-  .faq-item.open .faq-answer{max-height:300px;}
-  .faq-answer p{font-size:14px;line-height:1.85;color:var(--gray);padding-bottom:22px;}
-
-  .cta-band{background:var(--orange);padding:70px 60px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;}
-  .cta-band h2{font-family:'Montserrat',sans-serif;font-size:clamp(22px,3vw,38px);font-weight:700;color:var(--white);line-height:1.2;}
-  .cta-band h2 em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;}
-  .btn-white{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;color:var(--orange);background:var(--white);padding:16px 36px;text-decoration:none;display:inline-block;transition:all 0.25s;white-space:nowrap;}
-  .btn-white:hover{background:var(--black);color:var(--white);}
-  footer{background:var(--dark);padding:60px 60px 36px;}
-  .footer-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:44px;flex-wrap:wrap;gap:36px;}
-  .footer-logo{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:var(--white);text-decoration:none;}
-  .footer-logo span{color:var(--orange);}
-  .footer-links{display:flex;gap:48px;flex-wrap:wrap;}
-  .footer-col h4{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;font-weight:700;color:var(--orange);margin-bottom:18px;}
-  .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
-  .footer-col a{font-family:'Poppins',sans-serif;font-size:13px;color:#888;text-decoration:none;font-weight:300;transition:color 0.25s;}
-  .footer-col a:hover{color:var(--white);}
-  .footer-bottom{border-top:1px solid #2e2e2e;padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
-  .footer-copy{font-family:'Poppins',sans-serif;font-size:12px;color:#666;font-weight:300;}
-  .footer-legal{display:flex;gap:20px;}
-  .footer-legal a{font-family:'Poppins',sans-serif;font-size:12px;color:#666;text-decoration:none;transition:color 0.25s;}
-  .footer-legal a:hover{color:#aaa;}
-
-  @media(max-width:1100px){nav{padding:0 36px;}.nav-links{gap:24px;}.metrics,.thesis,.structures,.track,.faq,.cta-band{padding-left:40px;padding-right:40px;}.page-hero{padding:80px 40px;}.metrics-grid{grid-template-columns:repeat(2,1fr);}footer{padding:50px 40px 30px;}}
-  @media(max-width:900px){nav{padding:0 28px;}.nav-links,.nav-cta{display:none;}.nav-hamburger{display:flex;}.mobile-menu{display:flex;}.page-hero{padding:60px 28px;}.page-hero-inner{grid-template-columns:1fr;gap:36px;}.thesis{grid-template-columns:1fr;gap:40px;padding:72px 28px;}.thesis-img{order:-1;}.structures-grid{grid-template-columns:1fr 1fr;}.track-header,.track-row{grid-template-columns:2fr 1fr 1fr;}.track-header span:nth-child(4),.track-header span:nth-child(5),.track-row .track-cell:nth-child(4),.track-row .track-cell:nth-child(5){display:none;}.metrics,.structures,.track,.faq{padding:72px 28px;}.cta-band{padding:52px 28px;flex-direction:column;align-items:flex-start;}footer{padding:44px 28px 28px;}.footer-top{flex-direction:column;}.footer-links{gap:36px;}}
-  @media(max-width:600px){nav{height:64px;padding:0 20px;}.nav-logo{font-size:15px;}.mobile-menu{top:64px;}.page-hero{margin-top:64px;padding:44px 20px;}.hero-bg-text{display:none;}.metrics{padding:60px 20px;}.metrics-grid{grid-template-columns:1fr 1fr;}.structures-grid{grid-template-columns:1fr;}.thesis,.track,.faq{padding:60px 20px;}.track-header,.track-row{grid-template-columns:2fr 1fr;}.track-header span:nth-child(3),.track-header span:nth-child(4),.track-header span:nth-child(5){display:none;}.track-row .track-cell:nth-child(3),.track-row .track-cell:nth-child(4),.track-row .track-cell:nth-child(5){display:none;}.cta-band{padding:44px 20px;}footer{padding:36px 20px 24px;}.footer-links{flex-direction:column;gap:28px;}.footer-bottom{flex-direction:column;align-items:flex-start;}}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{--black:#0d0d0d;--dark:#1c1c1c;--mid:#555;--gray:#888;--border:#e4e4e4;--off-white:#f8f7f5;--white:#fff;--orange:#E8601C;--orange-pale:#fff4ee;--orange-dark:#c44e12;}
+html{scroll-behavior:smooth;}
+body{background:var(--white);color:var(--black);font-family:'Poppins',sans-serif;font-weight:300;overflow-x:hidden;}
+.cursor,.cursor-ring{display:none;}
+@media(pointer:fine){body{cursor:none;}.cursor{display:block;position:fixed;width:8px;height:8px;background:var(--orange);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}.cursor-ring{display:block;position:fixed;width:34px;height:34px;border:1.5px solid rgba(232,96,28,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.15s;}}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:var(--black);text-decoration:none;}
+.nav-logo span{color:var(--orange);}
+.nav-links{display:flex;gap:36px;list-style:none;}
+.nav-links a{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;color:var(--mid);text-decoration:none;transition:color 0.25s;}
+.nav-links a:hover,.nav-links a.active{color:var(--orange);}
+.nav-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;color:var(--white);background:var(--orange);padding:12px 28px;text-decoration:none;transition:background 0.25s;}
+.nav-cta:hover{background:var(--orange-dark);}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;z-index:201;}
+.nav-hamburger span{display:block;width:24px;height:2px;background:var(--black);transition:all 0.3s;}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:var(--white);z-index:199;flex-direction:column;padding:40px 30px;transform:translateX(100%);transition:transform 0.35s;}
+.mobile-menu.open{transform:translateX(0);}
+.mobile-menu li{list-style:none;border-bottom:1px solid var(--border);}
+.mobile-menu li a{display:block;padding:18px 0;font-family:'Montserrat',sans-serif;font-size:16px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--black);text-decoration:none;}
+.mobile-menu li a:hover{color:var(--orange);}
+.mobile-menu .mobile-cta{margin-top:32px;background:var(--orange);color:var(--white);padding:16px;text-align:center;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;text-decoration:none;display:block;}
+.page-hero{margin-top:72px;background:var(--dark);padding:100px 60px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.hero-label{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.38em;text-transform:uppercase;font-weight:700;color:var(--orange);display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.hero-label::before{content:'';width:28px;height:2px;background:var(--orange);display:block;}
+.page-hero h1{font-family:'Montserrat',sans-serif;font-size:clamp(36px,5vw,72px);font-weight:700;line-height:1.05;letter-spacing:-0.02em;color:var(--white);}
+.page-hero h1 em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;color:var(--orange);}
+.page-hero-right p{font-size:15px;line-height:1.85;color:rgba(255,255,255,0.55);}
+.metrics-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.08);margin-top:40px;border-top:1px solid rgba(255,255,255,0.08);}
+.metric{padding:24px 0;text-align:center;}
+.metric-num{font-family:'Montserrat',sans-serif;font-size:clamp(24px,3vw,36px);font-weight:700;color:var(--orange);display:block;line-height:1;}
+.metric-label{font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-top:6px;display:block;}
+.section-tag{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;font-weight:700;color:var(--orange);margin-bottom:18px;display:block;}
+.section-title{font-family:'Montserrat',sans-serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;line-height:1.1;letter-spacing:-0.02em;}
+.section-title em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;color:var(--orange);}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity 0.75s,transform 0.75s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.thesis{padding:100px 60px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.thesis-text p{font-size:14px;line-height:1.9;color:var(--gray);margin-top:20px;}
+.thesis-divider{width:44px;height:3px;background:var(--orange);margin:28px 0;}
+.thesis-points{display:flex;flex-direction:column;gap:0;}
+.thesis-point{padding:20px 0;border-bottom:1px solid var(--border);display:flex;gap:16px;align-items:flex-start;}
+.thesis-point:last-child{border-bottom:none;}
+.tp-num{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.18em;color:var(--orange);flex-shrink:0;width:24px;}
+.tp-title{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+.tp-desc{font-size:13px;line-height:1.65;color:var(--gray);}
+.structures{background:var(--off-white);padding:100px 60px;}
+.structures-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:52px;}
+.structure-card{background:var(--white);padding:44px 36px;border-top:3px solid var(--border);transition:border-color 0.3s,box-shadow 0.3s;}
+.structure-card:hover{border-color:var(--orange);box-shadow:0 6px 24px rgba(232,96,28,0.1);}
+.struct-type{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.25em;text-transform:uppercase;font-weight:700;color:var(--orange);margin-bottom:14px;}
+.struct-name{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:700;margin-bottom:16px;line-height:1.2;}
+.struct-desc{font-size:13px;line-height:1.75;color:var(--gray);margin-bottom:24px;}
+.struct-details{display:flex;flex-direction:column;gap:0;}
+.struct-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.struct-row:last-child{border-bottom:none;}
+.struct-row-label{color:var(--gray);}
+.struct-row-value{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--black);}
+.track-record{padding:100px 60px;}
+.track-header{margin-bottom:48px;}
+.track-table{width:100%;border-collapse:collapse;}
+.track-table th{font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;font-weight:700;color:var(--gray);padding:12px 16px;text-align:left;border-bottom:2px solid var(--border);}
+.track-table td{font-family:'Poppins',sans-serif;font-size:13px;padding:16px 16px;border-bottom:1px solid var(--border);color:var(--mid);}
+.track-table tr:hover td{background:var(--orange-pale);}
+.track-table td.highlight{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--orange);}
+.track-table td strong{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--black);}
+.faq{background:var(--off-white);padding:100px 60px;}
+.faq-header{margin-bottom:52px;}
+.faq-list{max-width:800px;}
+.faq-item{border-bottom:1px solid var(--border);}
+.faq-q{width:100%;text-align:left;background:none;border:none;padding:22px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:600;color:var(--black);gap:16px;}
+.faq-q:hover{color:var(--orange);}
+.faq-icon{font-size:20px;color:var(--orange);transition:transform 0.3s;flex-shrink:0;}
+.faq-item.open .faq-icon{transform:rotate(45deg);}
+.faq-a{display:none;padding-bottom:20px;font-size:13px;line-height:1.8;color:var(--gray);}
+.faq-item.open .faq-a{display:block;}
+.cta-band{background:var(--orange);padding:70px 60px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;}
+.cta-band h2{font-family:'Montserrat',sans-serif;font-size:clamp(22px,3vw,38px);font-weight:700;color:var(--white);line-height:1.2;}
+.cta-band h2 em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;}
+.btn-white{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;color:var(--orange);background:var(--white);padding:16px 36px;text-decoration:none;display:inline-block;transition:all 0.25s;white-space:nowrap;}
+.btn-white:hover{background:var(--black);color:var(--white);}
+footer{background:var(--dark);padding:60px 60px 36px;}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:44px;flex-wrap:wrap;gap:36px;}
+.footer-logo{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:var(--white);text-decoration:none;}
+.footer-logo span{color:var(--orange);}
+.footer-links{display:flex;gap:48px;flex-wrap:wrap;}
+.footer-col h4{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;font-weight:700;color:var(--orange);margin-bottom:18px;}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-col a{font-family:'Poppins',sans-serif;font-size:13px;color:#888;text-decoration:none;transition:color 0.25s;}
+.footer-col a:hover{color:var(--white);}
+.footer-bottom{border-top:1px solid #2e2e2e;padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-copy{font-family:'Poppins',sans-serif;font-size:12px;color:#666;}
+.footer-legal{display:flex;gap:20px;}
+.footer-legal a{font-family:'Poppins',sans-serif;font-size:12px;color:#666;text-decoration:none;transition:color 0.25s;}
+.footer-legal a:hover{color:#aaa;}
+@media(max-width:1100px){nav{padding:0 36px;}.nav-links{gap:24px;}.page-hero,.thesis,.structures,.track-record,.faq,.cta-band{padding-left:40px;padding-right:40px;}footer{padding:50px 40px 30px;}}
+@media(max-width:900px){nav{padding:0 28px;}.nav-links,.nav-cta{display:none;}.nav-hamburger{display:flex;}.mobile-menu{display:flex;}.page-hero{grid-template-columns:1fr;padding:60px 28px;}.metrics-bar{grid-template-columns:repeat(2,1fr);}.thesis{grid-template-columns:1fr;gap:40px;padding:72px 28px;}.structures-grid{grid-template-columns:1fr;}.structures,.track-record,.faq{padding:72px 28px;}.cta-band{flex-direction:column;align-items:flex-start;}footer{padding:44px 28px 28px;}.footer-top{flex-direction:column;}.footer-links{gap:36px;}}
+@media(max-width:600px){nav{height:64px;padding:0 20px;}.nav-logo{font-size:15px;}.mobile-menu{top:64px;}.page-hero{margin-top:64px;padding:44px 20px;}.metrics-bar{grid-template-columns:repeat(2,1fr);}.thesis,.structures,.track-record,.faq{padding:60px 20px;}.track-table{font-size:12px;}.track-table th,.track-table td{padding:10px 8px;}.cta-band{padding:44px 20px;}footer{padding:36px 20px 24px;}.footer-links{flex-direction:column;}.footer-bottom{flex-direction:column;align-items:flex-start;}}
 </style>
 </head>
 <body>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
-
 <nav>
-  <a href="luxury-dev-website.html" class="nav-logo">Meri<span>·</span>dian</a>
+  <a href="index.html" class="nav-logo">Meri<span>·</span>dian</a>
   <ul class="nav-links">
     <li><a href="about.html">About</a></li>
     <li><a href="projects.html">Projects</a></li>
@@ -161,158 +130,121 @@
   <li><a href="investors.html" class="mobile-link">Investors</a></li>
   <a href="contact.html" class="mobile-cta mobile-link">Enquire Now</a>
 </ul>
-
 <div class="page-hero">
-  <div class="hero-bg-text">INVEST</div>
-  <div class="page-hero-inner">
-    <div>
-      <div class="page-hero-label">Investor Relations</div>
-      <h1>Invest With<br><em>Meridian</em></h1>
-    </div>
-    <div class="page-hero-right">
-      <p>Meridian Development Group offers select institutional and high-net-worth investors access to one of the Northeast's most consistent luxury residential development platforms.</p>
-      <p>Our track record speaks for itself: 23 years of uninterrupted project delivery, a 100% on-time completion rate, and returns that consistently outperform the New York luxury residential benchmark.</p>
-      <a href="contact.html" class="btn-orange">Request Investor Pack</a>
+  <div>
+    <div class="hero-label">Investor Relations</div>
+    <h1>Partner With<br><em>Meridian</em></h1>
+  </div>
+  <div class="page-hero-right">
+    <p>Meridian Development Group has delivered consistent, risk-adjusted returns across 23 years and 47 projects. We offer accredited investors structured access to our portfolio through three distinct investment vehicles.</p>
+    <div class="metrics-bar">
+      <div class="metric"><span class="metric-num">$2.4B</span><span class="metric-label">Total Portfolio</span></div>
+      <div class="metric"><span class="metric-num">18.4%</span><span class="metric-label">Avg. IRR</span></div>
+      <div class="metric"><span class="metric-num">2.1×</span><span class="metric-label">Equity Multiple</span></div>
+      <div class="metric"><span class="metric-num">100%</span><span class="metric-label">On Schedule</span></div>
     </div>
   </div>
 </div>
-
-<!-- METRICS -->
-<section class="metrics">
-  <div class="reveal">
-    <span class="section-tag">Performance</span>
-    <h2 class="section-title">Track Record<br><em>at a Glance</em></h2>
-  </div>
-  <div class="metrics-grid reveal">
-    <div class="metric-card"><div class="metric-num">$2.4B</div><div class="metric-label">Total Portfolio Value</div><p class="metric-desc">Cumulative value of all completed and in-progress developments since 2001.</p></div>
-    <div class="metric-card"><div class="metric-num">18.4%</div><div class="metric-label">Avg. Equity IRR</div><p class="metric-desc">Average equity internal rate of return across 23 fully realised investment cycles.</p></div>
-    <div class="metric-card"><div class="metric-num">2.1×</div><div class="metric-label">Average Equity Multiple</div><p class="metric-desc">Average equity multiple returned to investors across completed project vehicles.</p></div>
-    <div class="metric-card"><div class="metric-num">100%</div><div class="metric-label">On-Time Delivery</div><p class="metric-desc">Every one of our 47 projects has been delivered on or before the committed timeline.</p></div>
-  </div>
-</section>
-
-<!-- INVESTMENT THESIS -->
 <section class="thesis">
-  <div class="thesis-text reveal">
+  <div class="reveal">
     <span class="section-tag">Why Meridian</span>
-    <h2 class="section-title">A Compelling<br><em>Investment Case</em></h2>
+    <h2 class="section-title">Our Investment<br><em>Thesis</em></h2>
     <div class="thesis-divider"></div>
-    <p>The Northeast luxury residential market is characterised by structural supply constraints, deep and diversified demand, and price resilience through economic cycles. Meridian's specific positioning within the ultra-luxury segment of this market provides a further layer of defensiveness.</p>
-    <div class="thesis-points">
-      <div class="thesis-point"><div class="tp-icon"></div><div><div class="tp-title">Supply-Constrained Market</div><p class="tp-desc">Manhattan's land scarcity and complex planning environment mean new luxury supply remains structurally limited.</p></div></div>
-      <div class="thesis-point"><div class="tp-icon"></div><div><div class="tp-title">Global Demand Pool</div><p class="tp-desc">Ultra-luxury New York residential attracts buyers from across the globe — insulating demand from local economic conditions.</p></div></div>
-      <div class="thesis-point"><div class="tp-icon"></div><div><div class="tp-title">Operational Alpha</div><p class="tp-desc">Meridian's design quality, brand positioning, and pre-sale strategy consistently generate premiums above market comparables.</p></div></div>
-      <div class="thesis-point"><div class="tp-icon"></div><div><div class="tp-title">Experienced Sponsorship</div><p class="tp-desc">A management team with 23+ years of co-investment, aligned incentives, and an unblemished delivery record.</p></div></div>
-    </div>
+    <p>Meridian occupies a structurally advantaged position in the luxury residential market — where supply constraints, high barriers to entry, and persistent demand from ultra-high-net-worth buyers create durable return profiles unavailable in other asset classes.</p>
+    <p>Our competitive advantages are built over decades, not quarters: proprietary site acquisition networks, unrivalled design partnerships, and a brand that commands price premiums in every market we enter.</p>
   </div>
-  <div class="thesis-img reveal">
-    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80" alt="New York investment">
-    <div class="thesis-img-stat">
-      <div><div class="tis-label">Avg. Premium to Market</div><div class="tis-value">+23%</div></div>
-      <div><div class="tis-label">Investor Capital Deployed</div><div class="tis-value">$840M</div></div>
-    </div>
+  <div class="thesis-points reveal">
+    <div class="thesis-point"><div class="tp-num">01</div><div><div class="tp-title">Supply Constrained Markets</div><p class="tp-desc">We build exclusively in land-scarce geographies where new luxury supply is structurally limited by zoning, cost, and competition.</p></div></div>
+    <div class="thesis-point"><div class="tp-num">02</div><div><div class="tp-title">Brand Premium</div><p class="tp-desc">The Meridian name commands average price premiums of 12–18% over comparable product in our target markets, directly protecting investor returns.</p></div></div>
+    <div class="thesis-point"><div class="tp-num">03</div><div><div class="tp-title">Design-Driven Value Creation</div><p class="tp-desc">Our investment in world-class design is not a cost — it is the single greatest driver of the price premiums our projects achieve at sale.</p></div></div>
+    <div class="thesis-point"><div class="tp-num">04</div><div><div class="tp-title">Programmatic Certainty</div><p class="tp-desc">100% of Meridian projects have been completed on schedule and within budget. This track record is unique in luxury development and essential to our investor relationships.</p></div></div>
   </div>
 </section>
-
-<!-- INVESTMENT STRUCTURES -->
 <section class="structures">
-  <div class="reveal">
-    <span class="section-tag">How to Invest</span>
-    <h2 class="section-title" style="color:var(--white)">Investment<br><em>Structures</em></h2>
-  </div>
+  <div class="reveal"><span class="section-tag">How to Invest</span><h2 class="section-title">Investment<br><em>Structures</em></h2></div>
   <div class="structures-grid reveal">
-    <div class="struct-card">
-      <span class="struct-icon">◈</span>
-      <div class="struct-title">Project-Level Equity</div>
-      <p class="struct-desc">Co-invest alongside Meridian in specific development projects, with returns tied directly to that project's performance.</p>
+    <div class="structure-card">
+      <div class="struct-type">Equity</div>
+      <div class="struct-name">Project Co-Investment</div>
+      <p class="struct-desc">Direct equity investment into individual Meridian development projects. Full transparency, project-level returns, and alignment with Meridian's own equity position.</p>
       <div class="struct-details">
-        <div class="struct-detail">Minimum: $5M per project</div>
-        <div class="struct-detail">Preferred return: 8% p.a.</div>
-        <div class="struct-detail">Target IRR: 16–22%</div>
-        <div class="struct-detail">Hold period: 3–5 years</div>
+        <div class="struct-row"><span class="struct-row-label">Minimum Investment</span><span class="struct-row-value">$2M</span></div>
+        <div class="struct-row"><span class="struct-row-label">Target IRR</span><span class="struct-row-value">18–22%</span></div>
+        <div class="struct-row"><span class="struct-row-label">Investment Period</span><span class="struct-row-value">3–4 Years</span></div>
+        <div class="struct-row"><span class="struct-row-label">Liquidity</span><span class="struct-row-value">At Completion</span></div>
       </div>
     </div>
-    <div class="struct-card">
-      <span class="struct-icon">◆</span>
-      <div class="struct-title">Portfolio Fund Vehicle</div>
-      <p class="struct-desc">Gain diversified exposure across multiple Meridian projects through our closed-end fund structure, launched every 3 years.</p>
+    <div class="structure-card">
+      <div class="struct-type">Fund</div>
+      <div class="struct-name">Meridian Opportunity Fund</div>
+      <p class="struct-desc">A diversified vehicle investing across 4–6 concurrent Meridian projects. Broader exposure, professional management, and quarterly reporting.</p>
       <div class="struct-details">
-        <div class="struct-detail">Minimum: $10M commitment</div>
-        <div class="struct-detail">Preferred return: 7% p.a.</div>
-        <div class="struct-detail">Target net IRR: 14–18%</div>
-        <div class="struct-detail">Fund life: 7 years</div>
+        <div class="struct-row"><span class="struct-row-label">Minimum Investment</span><span class="struct-row-value">$5M</span></div>
+        <div class="struct-row"><span class="struct-row-label">Target IRR</span><span class="struct-row-value">15–19%</span></div>
+        <div class="struct-row"><span class="struct-row-label">Investment Period</span><span class="struct-row-value">4–5 Years</span></div>
+        <div class="struct-row"><span class="struct-row-label">Distributions</span><span class="struct-row-value">Quarterly</span></div>
       </div>
     </div>
-    <div class="struct-card">
-      <span class="struct-icon">✦</span>
-      <div class="struct-title">Mezzanine Debt</div>
-      <p class="struct-desc">For investors seeking current income, Meridian offers secured mezzanine debt positions on select projects with priority distributions.</p>
+    <div class="structure-card">
+      <div class="struct-type">Debt</div>
+      <div class="struct-name">Mezzanine Lending</div>
+      <p class="struct-desc">Preferred-return debt positions secured against Meridian project assets. Lower risk profile with defined coupon and structured exit. Ideal for capital preservation mandates.</p>
       <div class="struct-details">
-        <div class="struct-detail">Minimum: $3M per tranche</div>
-        <div class="struct-detail">Coupon: 9–11% p.a.</div>
-        <div class="struct-detail">Secured against project assets</div>
-        <div class="struct-detail">Term: 24–36 months</div>
+        <div class="struct-row"><span class="struct-row-label">Minimum Investment</span><span class="struct-row-value">$1M</span></div>
+        <div class="struct-row"><span class="struct-row-label">Target Return</span><span class="struct-row-value">9–12%</span></div>
+        <div class="struct-row"><span class="struct-row-label">Investment Period</span><span class="struct-row-value">18–36 Months</span></div>
+        <div class="struct-row"><span class="struct-row-label">Security</span><span class="struct-row-value">Asset-Backed</span></div>
       </div>
     </div>
   </div>
 </section>
-
-<!-- TRACK RECORD TABLE -->
-<section class="track">
-  <div class="reveal">
-    <span class="section-tag">Realised Returns</span>
-    <h2 class="section-title">Selected<br><em>Project Returns</em></h2>
+<section class="track-record">
+  <div class="track-header reveal">
+    <span class="section-tag">Performance</span>
+    <h2 class="section-title">Track<br><em>Record</em></h2>
   </div>
-  <div class="track-table reveal">
-    <div class="track-header">
-      <span>Project</span><span>Year</span><span>Equity Multiple</span><span>IRR</span><span>Status</span>
-    </div>
-    <div class="track-row"><div class="track-project">Shore Reserve<span>East Hampton, NY</span></div><div class="track-cell">2022</div><div class="track-cell">2.4×</div><div class="track-return">22.1%</div><div class="track-cell">Realised</div></div>
-    <div class="track-row"><div class="track-project">Harlow Estates<span>Greenwich, CT</span></div><div class="track-cell">2023</div><div class="track-cell">1.9×</div><div class="track-return">17.4%</div><div class="track-cell">Realised</div></div>
-    <div class="track-row"><div class="track-project">The Solent<span>Hudson Yards, NY</span></div><div class="track-cell">2021</div><div class="track-cell">2.2×</div><div class="track-return">19.8%</div><div class="track-cell">Realised</div></div>
-    <div class="track-row"><div class="track-project">Vantage Hill<span>Westchester, NY</span></div><div class="track-cell">2022</div><div class="track-cell">1.8×</div><div class="track-return">16.2%</div><div class="track-cell">Realised</div></div>
-    <div class="track-row"><div class="track-project">The Alderton<span>Upper East Side, NY</span></div><div class="track-cell">2025</div><div class="track-cell">—</div><div class="track-return">In Progress</div><div class="track-cell">Active</div></div>
+  <div class="reveal" style="overflow-x:auto;">
+    <table class="track-table">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>Location</th>
+          <th>Completion</th>
+          <th>Total Value</th>
+          <th>Equity Multiple</th>
+          <th>Realised IRR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Shore Reserve</strong></td><td>East Hampton, NY</td><td>2022</td><td>$186M</td><td class="highlight">2.4×</td><td class="highlight">22.1%</td></tr>
+        <tr><td><strong>Harlow Estates</strong></td><td>Greenwich, CT</td><td>2023</td><td>$142M</td><td class="highlight">2.2×</td><td class="highlight">19.8%</td></tr>
+        <tr><td><strong>The Solent</strong></td><td>Hudson Yards, NY</td><td>2021</td><td>$320M</td><td class="highlight">2.1×</td><td class="highlight">18.2%</td></tr>
+        <tr><td><strong>Vantage Hill</strong></td><td>Westchester, NY</td><td>2022</td><td>$78M</td><td class="highlight">1.9×</td><td class="highlight">16.4%</td></tr>
+        <tr><td><strong>The Rowan</strong></td><td>Tribeca, NY</td><td>2019</td><td>$248M</td><td class="highlight">2.3×</td><td class="highlight">21.5%</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
-
-<!-- FAQ -->
 <section class="faq">
   <div class="faq-header reveal">
-    <span class="section-tag">FAQ</span>
-    <h2 class="section-title">Investor<br><em>Questions</em></h2>
+    <span class="section-tag">Common Questions</span>
+    <h2 class="section-title">Investor<br><em>FAQs</em></h2>
   </div>
   <div class="faq-list reveal">
-    <div class="faq-item open">
-      <div class="faq-question"><div class="faq-q-text">What is the minimum investment with Meridian?</div><div class="faq-icon">+</div></div>
-      <div class="faq-answer"><p>Minimum investment thresholds vary by structure. Project-level equity co-investments begin at $5M, fund commitments at $10M, and mezzanine debt positions from $3M. We work with a limited number of investors per project to maintain alignment and service quality.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question"><div class="faq-q-text">How are investor returns distributed?</div><div class="faq-icon">+</div></div>
-      <div class="faq-answer"><p>All structures feature a preferred return to investors before any profit is shared with the Meridian team. Distributions are made quarterly during the investment period, with the bulk of capital and profit returned upon project completion or fund exit.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question"><div class="faq-q-text">Is Meridian open to new investor relationships?</div><div class="faq-icon">+</div></div>
-      <div class="faq-answer"><p>We selectively add new investors to our platform on a relationship-by-introduction basis. The best first step is to reach out to our Investor Relations team directly. All enquiries are handled with complete discretion.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question"><div class="faq-q-text">What reporting do investors receive?</div><div class="faq-icon">+</div></div>
-      <div class="faq-answer"><p>Investors receive comprehensive quarterly reports covering project progress, financial performance, market conditions, and upcoming milestones. Annual audited financial statements are provided for all fund vehicles. Our investor portal provides real-time access to all documentation.</p></div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-question"><div class="faq-q-text">How does Meridian manage construction risk?</div><div class="faq-icon">+</div></div>
-      <div class="faq-answer"><p>Our 100% on-time delivery record reflects a rigorous risk management framework: fixed-price construction contracts, performance bonds, comprehensive insurance, a dedicated QA team, and a proprietary 240-point quality control checklist applied throughout every project.</p></div>
-    </div>
+    <div class="faq-item"><button class="faq-q">Who can invest with Meridian? <span class="faq-icon">+</span></button><p class="faq-a">Meridian investment opportunities are available to accredited investors and qualified institutional partners. Minimum net worth thresholds and eligibility requirements vary by structure. Please contact our investor relations team to discuss your specific situation.</p></div>
+    <div class="faq-item"><button class="faq-q">How are investors kept informed during a project? <span class="faq-icon">+</span></button><p class="faq-a">All investors receive quarterly reporting including construction progress updates, sales velocity data, and financial performance against underwriting. We also host two investor days per year across all active projects, with site tours available on request.</p></div>
+    <div class="faq-item"><button class="faq-q">What is Meridian's own co-investment policy? <span class="faq-icon">+</span></button><p class="faq-a">Meridian always invests its own equity alongside investors in every project — typically 15–25% of total equity. This alignment is fundamental to our investor relationships and non-negotiable in our investment structure.</p></div>
+    <div class="faq-item"><button class="faq-q">How does Meridian manage construction risk? <span class="faq-icon">+</span></button><p class="faq-a">All Meridian projects are self-managed with in-house construction management, fixed-price contracts with pre-qualified contractors, and comprehensive insurance programmes. Our 100% on-schedule delivery record is the result of a disciplined programme management culture built over 23 years.</p></div>
+    <div class="faq-item"><button class="faq-q">Is there a secondary market for Meridian fund interests? <span class="faq-icon">+</span></button><p class="faq-a">Meridian maintains an informal secondary market for fund interests, facilitating transfers between accredited investors. Primary liquidity events occur at project completion. We recommend treating Meridian investments as illiquid for their stated investment period.</p></div>
   </div>
 </section>
-
 <div class="cta-band reveal">
-  <h2>Ready to Explore<br><em>Investment Opportunities?</em></h2>
-  <a href="contact.html" class="btn-white">Request Investor Pack</a>
+  <h2>Discuss an Investment<br><em>Opportunity</em></h2>
+  <a href="contact.html" class="btn-white">Contact Investor Relations</a>
 </div>
-
 <footer>
   <div class="footer-top">
-    <a href="luxury-dev-website.html" class="footer-logo">Meri<span>·</span>dian</a>
+    <a href="index.html" class="footer-logo">Meri<span>·</span>dian</a>
     <div class="footer-links">
       <div class="footer-col"><h4>Developments</h4><ul><li><a href="projects.html">Current Projects</a></li><li><a href="projects.html">Completed</a></li><li><a href="projects.html">Pre-Sale</a></li></ul></div>
       <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Meridian</a></li><li><a href="about.html">Leadership</a></li><li><a href="investors.html">Investors</a></li></ul></div>
@@ -325,13 +257,13 @@
   </div>
 </footer>
 <script>
-  if(window.matchMedia('(pointer: fine)').matches){const c=document.getElementById('cursor'),r=document.getElementById('cursorRing');let mx=0,my=0,rx=0,ry=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;c.style.left=mx+'px';c.style.top=my+'px';});(function loop(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=rx+'px';r.style.top=ry+'px';requestAnimationFrame(loop);})();}
-  const hb=document.getElementById('hamburger'),mm=document.getElementById('mobileMenu');
-  hb.addEventListener('click',()=>{hb.classList.toggle('open');mm.classList.toggle('open');document.body.style.overflow=mm.classList.contains('open')?'hidden':'';});
-  document.querySelectorAll('.mobile-link').forEach(l=>l.addEventListener('click',()=>{hb.classList.remove('open');mm.classList.remove('open');document.body.style.overflow='';}));
-  document.querySelectorAll('.faq-question').forEach(q=>{q.addEventListener('click',()=>{const item=q.parentElement;const wasOpen=item.classList.contains('open');document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));if(!wasOpen)item.classList.add('open');});});
-  const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);}),{threshold:0.08});
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+if(window.matchMedia('(pointer:fine)').matches){const c=document.getElementById('cursor'),r=document.getElementById('cursorRing');let mx=0,my=0,rx=0,ry=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;c.style.left=mx+'px';c.style.top=my+'px';});(function loop(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=rx+'px';r.style.top=ry+'px';requestAnimationFrame(loop);})();}
+const hb=document.getElementById('hamburger'),mm=document.getElementById('mobileMenu');
+hb.addEventListener('click',()=>{hb.classList.toggle('open');mm.classList.toggle('open');document.body.style.overflow=mm.classList.contains('open')?'hidden':'';});
+document.querySelectorAll('.mobile-link').forEach(l=>l.addEventListener('click',()=>{hb.classList.remove('open');mm.classList.remove('open');document.body.style.overflow='';}));
+document.querySelectorAll('.faq-q').forEach(btn=>btn.addEventListener('click',()=>{const item=btn.parentElement;const isOpen=item.classList.contains('open');document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));if(!isOpen)item.classList.add('open');}));
+const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
 </body>
 </html>
