@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Process — MERIDIAN Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{--black:#0d0d0d;--dark:#1c1c1c;--mid:#555;--gray:#888;--light-gray:#bbb;--border:#e4e4e4;--off-white:#f8f7f5;--white:#fff;--orange:#E8601C;--orange-light:#f0743a;--orange-pale:#fff4ee;--orange-dark:#c44e12;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--white);color:var(--black);font-family:'Poppins',sans-serif;font-weight:300;overflow-x:hidden;}
+  .cursor,.cursor-ring{display:none;}
+  @media(pointer:fine){body{cursor:none;}.cursor{display:block;position:fixed;width:8px;height:8px;background:var(--orange);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}.cursor-ring{display:block;position:fixed;width:34px;height:34px;border:1.5px solid rgba(232,96,28,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.15s ease;}}
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:var(--black);text-decoration:none;z-index:201;}
+  .nav-logo span{color:var(--orange);}
+  .nav-links{display:flex;gap:36px;list-style:none;}
+  .nav-links a{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;color:var(--mid);text-decoration:none;transition:color 0.25s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--orange);}
+  .nav-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;color:var(--white);background:var(--orange);padding:12px 28px;text-decoration:none;transition:background 0.25s;}
+  .nav-cta:hover{background:var(--orange-dark);}
+  .nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;z-index:201;}
+  .nav-hamburger span{display:block;width:24px;height:2px;background:var(--black);transition:all 0.3s ease;}
+  .nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-hamburger.open span:nth-child(2){opacity:0;}
+  .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:var(--white);z-index:199;flex-direction:column;padding:40px 30px;overflow-y:auto;transform:translateX(100%);transition:transform 0.35s ease;}
+  .mobile-menu.open{transform:translateX(0);}
+  .mobile-menu li{list-style:none;border-bottom:1px solid var(--border);}
+  .mobile-menu li a{display:block;padding:18px 0;font-family:'Montserrat',sans-serif;font-size:16px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--black);text-decoration:none;}
+  .mobile-menu li a:hover{color:var(--orange);}
+  .mobile-menu .mobile-cta{margin-top:32px;background:var(--orange);color:var(--white);padding:16px;text-align:center;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;text-decoration:none;display:block;}
+  .section-tag{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;font-weight:700;color:var(--orange);margin-bottom:18px;display:block;}
+  .section-title{font-family:'Montserrat',sans-serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;line-height:1.1;letter-spacing:-0.02em;}
+  .section-title em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;color:var(--orange);}
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.75s ease,transform 0.75s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  .page-hero{margin-top:72px;background:var(--dark);padding:100px 60px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;position:relative;overflow:hidden;}
+  .page-hero::before{content:'';position:absolute;right:-100px;top:-100px;width:500px;height:500px;border-radius:50%;border:1px solid rgba(232,96,28,0.12);pointer-events:none;}
+  .page-hero::after{content:'';position:absolute;right:-50px;top:-50px;width:300px;height:300px;border-radius:50%;border:1px solid rgba(232,96,28,0.08);pointer-events:none;}
+  .page-hero-label{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.38em;text-transform:uppercase;font-weight:700;color:var(--orange);display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+  .page-hero-label::before{content:'';width:28px;height:2px;background:var(--orange);display:block;}
+  .page-hero h1{font-family:'Montserrat',sans-serif;font-size:clamp(36px,5vw,72px);font-weight:700;line-height:1.05;letter-spacing:-0.02em;color:var(--white);}
+  .page-hero h1 em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;color:var(--orange);}
+  .page-hero-right p{font-size:15px;line-height:1.85;color:rgba(255,255,255,0.55);font-weight:300;}
+  .hero-steps-preview{display:flex;flex-direction:column;gap:0;margin-top:36px;}
+  .hero-step-row{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,0.07);}
+  .hero-step-num{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--orange);width:32px;flex-shrink:0;}
+  .hero-step-name{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.7);}
+  .hero-step-arrow{margin-left:auto;color:rgba(255,255,255,0.25);font-size:14px;}
+
+  /* PROCESS STEPS */
+  .process-steps{padding:0 60px 100px;}
+  .step-block{display:grid;grid-template-columns:80px 1fr 1fr;gap:0;border-bottom:1px solid var(--border);padding:72px 0;align-items:start;}
+  .step-block:first-child{padding-top:80px;}
+  .step-num-big{font-family:'Montserrat',sans-serif;font-size:80px;font-weight:700;line-height:1;color:rgba(232,96,28,0.1);padding-top:4px;}
+  .step-content{padding:0 60px 0 32px;}
+  .step-title{font-family:'Montserrat',sans-serif;font-size:clamp(22px,2.5vw,34px);font-weight:700;line-height:1.15;margin-bottom:20px;}
+  .step-title em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;color:var(--orange);}
+  .step-desc{font-size:14px;line-height:1.9;color:var(--gray);}
+  .step-details{display:flex;flex-direction:column;gap:0;}
+  .step-detail-item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--border);}
+  .step-detail-item:last-child{border-bottom:none;}
+  .step-detail-icon{width:36px;height:36px;background:var(--orange-pale);border:1px solid rgba(232,96,28,0.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px;}
+  .step-detail-title{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--black);margin-bottom:5px;}
+  .step-detail-text{font-size:12px;line-height:1.65;color:var(--gray);}
+
+  /* TIMELINE VISUAL */
+  .timeline-visual{background:var(--off-white);padding:100px 60px;}
+  .timeline-visual-inner{max-width:860px;margin:0 auto;}
+  .tv-header{text-align:center;margin-bottom:64px;}
+  .tv-header p{font-size:14px;line-height:1.85;color:var(--gray);margin-top:16px;}
+  .tv-steps{display:flex;gap:0;position:relative;}
+  .tv-steps::before{content:'';position:absolute;top:28px;left:28px;right:28px;height:2px;background:var(--border);z-index:0;}
+  .tv-step{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;z-index:1;}
+  .tv-dot{width:56px;height:56px;border-radius:50%;background:var(--white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:all 0.3s;font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:var(--light-gray);}
+  .tv-step.active .tv-dot,.tv-step:hover .tv-dot{background:var(--orange);border-color:var(--orange);color:var(--white);}
+  .tv-step-label{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--mid);margin-bottom:6px;}
+  .tv-step.active .tv-step-label,.tv-step:hover .tv-step-label{color:var(--orange);}
+  .tv-step-sub{font-size:11px;color:var(--light-gray);}
+
+  /* STANDARDS */
+  .standards{padding:100px 60px;background:var(--white);}
+  .standards-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:52px;}
+  .standard-card{padding:44px 40px;background:var(--off-white);position:relative;overflow:hidden;}
+  .standard-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--border);transition:background 0.3s;}
+  .standard-card:hover::before{background:var(--orange);}
+  .standard-num{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.22em;color:var(--orange);margin-bottom:16px;}
+  .standard-title{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:700;color:var(--black);margin-bottom:14px;}
+  .standard-desc{font-size:13px;line-height:1.8;color:var(--gray);}
+
+  /* PARTNERS */
+  .partners{background:var(--dark);padding:80px 60px;text-align:center;}
+  .partners .section-title{color:var(--white);margin-bottom:12px;}
+  .partners-sub{font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:56px;}
+  .partner-logos{display:flex;justify-content:center;align-items:center;gap:48px;flex-wrap:wrap;}
+  .partner-name{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:16px 28px;border:1px solid rgba(255,255,255,0.08);transition:all 0.3s;}
+  .partner-name:hover{color:rgba(255,255,255,0.7);border-color:rgba(232,96,28,0.4);}
+
+  .cta-band{background:var(--orange);padding:70px 60px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;}
+  .cta-band h2{font-family:'Montserrat',sans-serif;font-size:clamp(22px,3vw,38px);font-weight:700;color:var(--white);line-height:1.2;}
+  .cta-band h2 em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;}
+  .btn-white{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;color:var(--orange);background:var(--white);padding:16px 36px;text-decoration:none;display:inline-block;transition:all 0.25s;white-space:nowrap;}
+  .btn-white:hover{background:var(--black);color:var(--white);}
+  footer{background:var(--dark);padding:60px 60px 36px;}
+  .footer-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:44px;flex-wrap:wrap;gap:36px;}
+  .footer-logo{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:var(--white);text-decoration:none;}
+  .footer-logo span{color:var(--orange);}
+  .footer-links{display:flex;gap:48px;flex-wrap:wrap;}
+  .footer-col h4{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;font-weight:700;color:var(--orange);margin-bottom:18px;}
+  .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .footer-col a{font-family:'Poppins',sans-serif;font-size:13px;color:#888;text-decoration:none;font-weight:300;transition:color 0.25s;}
+  .footer-col a:hover{color:var(--white);}
+  .footer-bottom{border-top:1px solid #2e2e2e;padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  .footer-copy{font-family:'Poppins',sans-serif;font-size:12px;color:#666;font-weight:300;}
+  .footer-legal{display:flex;gap:20px;}
+  .footer-legal a{font-family:'Poppins',sans-serif;font-size:12px;color:#666;text-decoration:none;transition:color 0.25s;}
+  .footer-legal a:hover{color:#aaa;}
+
+  @media(max-width:1100px){nav{padding:0 36px;}.nav-links{gap:24px;}.page-hero,.process-steps,.timeline-visual,.standards,.partners,.cta-band{padding-left:40px;padding-right:40px;}footer{padding:50px 40px 30px;}.step-block{grid-template-columns:60px 1fr 1fr;}.step-content{padding:0 40px 0 24px;}}
+  @media(max-width:900px){nav{padding:0 28px;}.nav-links,.nav-cta{display:none;}.nav-hamburger{display:flex;}.mobile-menu{display:flex;}.page-hero{grid-template-columns:1fr;padding:60px 28px;}.step-block{grid-template-columns:1fr;gap:20px;padding:52px 0;}.step-num-big{font-size:56px;}.step-content{padding:0;}.standards-grid{grid-template-columns:1fr;}.tv-steps{flex-wrap:wrap;gap:28px;}.tv-steps::before{display:none;}.process-steps{padding:0 28px 80px;}.timeline-visual,.standards,.partners{padding:80px 28px;}.cta-band{padding:52px 28px;flex-direction:column;align-items:flex-start;}footer{padding:44px 28px 28px;}.footer-top{flex-direction:column;}.footer-links{gap:36px;}}
+  @media(max-width:600px){nav{height:64px;padding:0 20px;}.nav-logo{font-size:15px;}.mobile-menu{top:64px;}.page-hero{margin-top:64px;padding:44px 20px;}.process-steps{padding:0 20px 60px;}.step-block{padding:44px 0;}.timeline-visual,.standards,.partners{padding:60px 20px;}.partner-logos{gap:20px;}.partner-name{padding:12px 18px;font-size:11px;}.cta-band{padding:44px 20px;}footer{padding:36px 20px 24px;}.footer-links{flex-direction:column;gap:28px;}.footer-bottom{flex-direction:column;align-items:flex-start;}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="luxury-dev-website.html" class="nav-logo">Meri<span>·</span>dian</a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="process.html" class="active">Process</a></li>
+    <li><a href="investors.html">Investors</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Enquire Now</a>
+  <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<ul class="mobile-menu" id="mobileMenu">
+  <li><a href="about.html" class="mobile-link">About</a></li>
+  <li><a href="projects.html" class="mobile-link">Projects</a></li>
+  <li><a href="process.html" class="mobile-link">Process</a></li>
+  <li><a href="investors.html" class="mobile-link">Investors</a></li>
+  <a href="contact.html" class="mobile-cta mobile-link">Enquire Now</a>
+</ul>
+
+<div class="page-hero">
+  <div>
+    <div class="page-hero-label">How We Work</div>
+    <h1>The Meridian<br><em>Method</em></h1>
+  </div>
+  <div class="page-hero-right">
+    <p>Our development process has been refined over 23 years and 47 projects. Every step is designed to protect our clients' investment while ensuring the extraordinary quality Meridian is known for.</p>
+    <div class="hero-steps-preview">
+      <div class="hero-step-row"><div class="hero-step-num">01</div><div class="hero-step-name">Vision & Site Acquisition</div><div class="hero-step-arrow">→</div></div>
+      <div class="hero-step-row"><div class="hero-step-num">02</div><div class="hero-step-name">Design & Architecture</div><div class="hero-step-arrow">→</div></div>
+      <div class="hero-step-row"><div class="hero-step-num">03</div><div class="hero-step-name">Planning & Approvals</div><div class="hero-step-arrow">→</div></div>
+      <div class="hero-step-row"><div class="hero-step-num">04</div><div class="hero-step-name">Construction & Craft</div><div class="hero-step-arrow">→</div></div>
+      <div class="hero-step-row"><div class="hero-step-num">05</div><div class="hero-step-name">Sales & Delivery</div><div class="hero-step-arrow">→</div></div>
+      <div class="hero-step-row"><div class="hero-step-num">06</div><div class="hero-step-name">Stewardship & Support</div><div class="hero-step-arrow">→</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP BLOCKS -->
+<div class="process-steps">
+  <div class="step-block reveal">
+    <div class="step-num-big">01</div>
+    <div class="step-content">
+      <div class="step-title">Vision &<br><em>Site Acquisition</em></div>
+      <p class="step-desc">Everything begins with a precise understanding of where luxury demand meets scarcity. Our acquisitions team evaluates dozens of opportunities each year, selecting only those with the potential to become landmark addresses. We look beyond zoning and price to assess cultural capital, neighbourhood trajectory, and long-term value creation.</p>
+    </div>
+    <div class="step-details">
+      <div class="step-detail-item"><div class="step-detail-icon">◈</div><div><div class="step-detail-title">Market Analysis</div><p class="step-detail-text">Comprehensive demand modelling, comparable sales analysis, and buyer profile mapping before any site is considered.</p></div></div>
+      <div class="step-detail-item"><div class="step-detail-icon">◆</div><div><div class="step-detail-title">Due Diligence</div><p class="step-detail-text">Legal, environmental, and structural review conducted by our in-house team of specialists.</p></div></div>
+      <div class="step-detail-item"><div class="step-detail-icon">✦</div><div><div class="step-detail-title">Feasibility Study</div><p class="step-detail-text">Full financial modelling including construction cost, yield projection, and return sensitivity analysis.</p></div></div>
+    </div>
+  </div>
+
+  <div class="step-block reveal">
+    <div class="step-num-big">02</div>
+    <div class="step-content">
+      <div class="step-title">Design &<br><em>Architecture</em></div>
+      <p class="step-desc">We commission the world's finest architects and interior designers — selecting talent whose aesthetic vision aligns with the specific character of each site. Our design process is collaborative, rigorous, and uncompromising. We never value-engineer design decisions that would diminish the integrity of the finished product.</p>
+    </div>
+    <div class="step-details">
+      <div class="step-detail-item"><div class="step-detail-icon">◉</div><div><div class="step-detail-title">Architect Selection</div><p class="step-detail-text">We work with globally recognised firms including BIG, SOM, and Zaha Hadid Architects, matched to each project's character.</p></div></div>
+      <div class="step-detail-item"><div class="step-detail-icon">▲</div><div><div class="step-detail-title">Interior Design</div><p class="step-detail-text">Interiors are treated as seriously as architecture — with separate commissions given to world-class interior studios.</p></div></div>
+      <div class="step-detail-item"><div class="step-detail-icon">●</div><div><div class="step-detail-title">Sustainability Integration</div><p class="step-detail-text">LEED and WELL certifications are built into design from day one, not retrofitted at the end.</p></div></div>
+    </div>
+  </div>
+
+  <div class="step-block reveal">
+    <div class="step-num-big">03</div>
+    <div class="step-content">
+      <div class="step-title">Planning &<br><em>Approvals</em></div>
+      <p class="step-desc">Navigating complex urban planning environments requires deep expertise and long-standing relationships. Our planning team has successfully guided projects through some of New York's most challenging approval processes — from landmark preservation requirements to complex air rights negotiations.</p>
+    </div>
+    <div class="step-details">
+      <div class="step-detail-item"><div class="step-detail-icon">◈</div><div><div class="step-detail-title">Permit Management</div><p class="step-detail-text">In-house planning experts manage all municipal permit processes, typically reducing approval timelines by 30%.</p></div></div>
+      <div class="step-detail-item"><div class="step-detail-icon">◆</div><div><div class="step-detail-title">Community Engagement</div><p class="step-detail-text">We invest in community consultation at every project, ensuring local stakeholders understand and support our vision.</p></div></div>
+    </div>
+  </div>
+
+  <div class="step-block reveal">
+    <div class="step-num-big">04</div>
+    <div class="step-content">
+      <div class="step-title">Construction &<br><em>Craftsmanship</em></div>
+      <p class="step-desc">We build with a network of specialist contractors and artisans developed over two decades. Our construction management team is on-site daily, ensuring that every detail is executed precisely to specification. We apply the same scrutiny to a door handle as we do to a structural system.</p>
+    </div>
+    <div class="step-details">
+      <div class="step-detail-item"><div class="step-detail-icon">◉</div><div><div class="step-detail-title">Quality Control</div><p class="step-detail-text">Our proprietary 240-point quality checklist is applied at every stage of construction — from foundation to finishing.</p></div></div>
+      <div class="step-detail-item"><div class="step-detail-icon">▲</div><div><div class="step-detail-title">100% On-Time Record</div><p class="step-detail-text">Meridian has never missed a committed completion date across 47 projects — a record we protect fiercely.</p></div></div>
+      <div class="step-detail-item"><div class="step-detail-icon">●</div><div><div class="step-detail-title">Artisan Network</div><p class="step-detail-text">Relationships with over 80 specialist craftspeople in metalwork, stone, bespoke joinery, and decorative plaster.</p></div></div>
+    </div>
+  </div>
+
+  <div class="step-block reveal">
+    <div class="step-num-big">05</div>
+    <div class="step-content">
+      <div class="step-title">Sales &<br><em>Delivery</em></div>
+      <p class="step-desc">Our sales process is as considered as our design process. We don't operate open showrooms or rely on third-party brokers for primary sales. Instead, our dedicated in-house sales team cultivates relationships with qualified buyers and their advisors — ensuring each home reaches the right owner through a curated, private process.</p>
+    </div>
+    <div class="step-details">
+      <div class="step-detail-item"><div class="step-detail-icon">◈</div><div><div class="step-detail-title">Private Sales Process</div><p class="step-detail-text">Curated introductions to qualified buyers with white-glove consultation from enquiry to completion.</p></div></div>
+      <div class="step-detail-item"><div class="step-detail-icon">◆</div><div><div class="step-detail-title">Bespoke Customisation</div><p class="step-detail-text">Buyers at pre-sale stage work with our design team to personalise finishes, materials, and floor plan configurations.</p></div></div>
+    </div>
+  </div>
+
+  <div class="step-block reveal">
+    <div class="step-num-big">06</div>
+    <div class="step-content">
+      <div class="step-title">Stewardship &<br><em>Aftercare</em></div>
+      <p class="step-desc">Our commitment to residents does not end at completion. The Meridian Resident Services team is available to every homeowner indefinitely — managing warranties, facilitating introductions to maintenance professionals, and coordinating building services. We believe in the properties we build for the long term.</p>
+    </div>
+    <div class="step-details">
+      <div class="step-detail-item"><div class="step-detail-icon">◉</div><div><div class="step-detail-title">5-Year Warranty</div><p class="step-detail-text">Every Meridian home comes with our comprehensive 5-year structural and finish warranty — double the industry standard.</p></div></div>
+      <div class="step-detail-item"><div class="step-detail-icon">▲</div><div><div class="step-detail-title">Concierge Service</div><p class="step-detail-text">Dedicated resident services team available 7 days a week for all maintenance, service, and lifestyle requests.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TIMELINE VISUAL -->
+<div class="timeline-visual reveal">
+  <div class="timeline-visual-inner">
+    <div class="tv-header">
+      <span class="section-tag">Timeline</span>
+      <h2 class="section-title">From Acquisition<br><em>to Delivery</em></h2>
+      <p>Typical project timeline of 36–48 months from site acquisition to resident move-in.</p>
+    </div>
+    <div class="tv-steps">
+      <div class="tv-step active"><div class="tv-dot">01</div><div class="tv-step-label">Vision</div><div class="tv-step-sub">Months 1–3</div></div>
+      <div class="tv-step"><div class="tv-dot">02</div><div class="tv-step-label">Design</div><div class="tv-step-sub">Months 4–10</div></div>
+      <div class="tv-step"><div class="tv-dot">03</div><div class="tv-step-label">Planning</div><div class="tv-step-sub">Months 11–16</div></div>
+      <div class="tv-step"><div class="tv-dot">04</div><div class="tv-step-label">Build</div><div class="tv-step-sub">Months 17–38</div></div>
+      <div class="tv-step"><div class="tv-dot">05</div><div class="tv-step-label">Sales</div><div class="tv-step-sub">Months 20–42</div></div>
+      <div class="tv-step"><div class="tv-dot">06</div><div class="tv-step-label">Delivery</div><div class="tv-step-sub">Month 44+</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- STANDARDS -->
+<section class="standards">
+  <div class="reveal">
+    <span class="section-tag">Our Standards</span>
+    <h2 class="section-title">The Non-Negotiables</h2>
+  </div>
+  <div class="standards-grid reveal">
+    <div class="standard-card"><div class="standard-num">Standard 01</div><div class="standard-title">100% On-Time Delivery</div><p class="standard-desc">We have never missed a committed completion date. This is a cultural commitment enforced from the top and built into every contractor agreement we sign.</p></div>
+    <div class="standard-card"><div class="standard-num">Standard 02</div><div class="standard-title">LEED Certification on Every Project</div><p class="standard-desc">All Meridian developments achieve a minimum of LEED Gold certification. Our most recent 12 projects have all achieved LEED Platinum.</p></div>
+    <div class="standard-card"><div class="standard-num">Standard 03</div><div class="standard-title">No Value Engineering on Design</div><p class="standard-desc">We never reduce the quality of materials or design elements to improve margins. If the numbers don't work at the quality level required, we don't proceed with the project.</p></div>
+    <div class="standard-card"><div class="standard-num">Standard 04</div><div class="standard-title">5-Year Full Warranty</div><p class="standard-desc">Every home we build carries a 5-year comprehensive warranty covering structural integrity, mechanical systems, and all finish elements — double the statutory requirement.</p></div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<div class="partners reveal">
+  <span class="section-tag">Our Partners</span>
+  <h2 class="section-title" style="color:var(--white)">Design &<br><em>Build Partners</em></h2>
+  <p class="partners-sub">We collaborate exclusively with the world's foremost architects, designers, and contractors.</p>
+  <div class="partner-logos">
+    <div class="partner-name">Zaha Hadid Architects</div>
+    <div class="partner-name">BIG — Bjarke Ingels</div>
+    <div class="partner-name">SOM</div>
+    <div class="partner-name">David Collins Studio</div>
+    <div class="partner-name">Molteni&C</div>
+    <div class="partner-name">Boffi</div>
+  </div>
+</div>
+
+<div class="cta-band reveal">
+  <h2>Questions About<br><em>Our Process?</em></h2>
+  <a href="contact.html" class="btn-white">Speak With Our Team</a>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <a href="luxury-dev-website.html" class="footer-logo">Meri<span>·</span>dian</a>
+    <div class="footer-links">
+      <div class="footer-col"><h4>Developments</h4><ul><li><a href="projects.html">Current Projects</a></li><li><a href="projects.html">Completed</a></li><li><a href="projects.html">Pre-Sale</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Meridian</a></li><li><a href="about.html">Leadership</a></li><li><a href="investors.html">Investors</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a href="contact.html">Sales Enquiries</a></li><li><a href="contact.html">Investor Enquiries</a></li><li><a href="contact.html">Careers</a></li></ul></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2024 Meridian Development Group. All rights reserved.</span>
+    <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div>
+  </div>
+</footer>
+<script>
+  if(window.matchMedia('(pointer: fine)').matches){const c=document.getElementById('cursor'),r=document.getElementById('cursorRing');let mx=0,my=0,rx=0,ry=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;c.style.left=mx+'px';c.style.top=my+'px';});(function loop(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=rx+'px';r.style.top=ry+'px';requestAnimationFrame(loop);})();}
+  const hb=document.getElementById('hamburger'),mm=document.getElementById('mobileMenu');
+  hb.addEventListener('click',()=>{hb.classList.toggle('open');mm.classList.toggle('open');document.body.style.overflow=mm.classList.contains('open')?'hidden':'';});
+  document.querySelectorAll('.mobile-link').forEach(l=>l.addEventListener('click',()=>{hb.classList.remove('open');mm.classList.remove('open');document.body.style.overflow='';}));
+  const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);}),{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

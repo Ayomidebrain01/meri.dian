@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Alderton — MERIDIAN Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #0d0d0d; --dark: #1c1c1c; --mid: #555; --gray: #888;
+    --light-gray: #bbb; --border: #e4e4e4; --off-white: #f8f7f5;
+    --white: #fff; --orange: #E8601C; --orange-light: #f0743a;
+    --orange-pale: #fff4ee; --orange-dark: #c44e12;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--white); color: var(--black); font-family: 'Poppins', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+  /* CURSOR */
+  .cursor, .cursor-ring { display: none; }
+  @media (pointer: fine) {
+    body { cursor: none; }
+    .cursor { display: block; position: fixed; width: 8px; height: 8px; background: var(--orange); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s; }
+    .cursor-ring { display: block; position: fixed; width: 34px; height: 34px; border: 1.5px solid rgba(232,96,28,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all 0.15s ease; }
+    .cursor.hover { width: 16px; height: 16px; background: transparent; border: 2px solid var(--orange); }
+    .cursor-ring.hover { width: 56px; height: 56px; border-color: rgba(232,96,28,0.2); }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 60px; height: 72px;
+    background: rgba(255,255,255,0.97); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    transform: translateY(0); transition: transform 0.4s ease, box-shadow 0.4s;
+  }
+  nav.hidden { transform: translateY(-100%); }
+  nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+  .nav-logo { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--black); text-decoration: none; z-index: 201; }
+  .nav-logo span { color: var(--orange); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; color: var(--mid); text-decoration: none; transition: color 0.25s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--orange); }
+  .nav-cta { font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--white); background: var(--orange); padding: 12px 28px; text-decoration: none; transition: background 0.25s; }
+  .nav-cta:hover { background: var(--orange-dark); }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; z-index: 201; }
+  .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--black); transition: all 0.3s ease; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; bottom: 0; background: var(--white); z-index: 199; flex-direction: column; padding: 40px 30px; overflow-y: auto; transform: translateX(100%); transition: transform 0.35s ease; }
+  .mobile-menu.open { transform: translateX(0); }
+  .mobile-menu li { list-style: none; border-bottom: 1px solid var(--border); }
+  .mobile-menu li a { display: block; padding: 18px 0; font-family: 'Montserrat', sans-serif; font-size: 16px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--black); text-decoration: none; transition: color 0.2s; }
+  .mobile-menu li a:hover { color: var(--orange); }
+  .mobile-menu .mobile-cta { margin-top: 32px; background: var(--orange); color: var(--white); padding: 16px; text-align: center; font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; display: block; }
+
+  /* HERO */
+  .hero { height: 100vh; position: relative; overflow: hidden; }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=85');
+    background-size: cover; background-position: center;
+    filter: brightness(0.45);
+    transform: scale(1.08);
+    animation: heroZoom 14s ease-out forwards;
+  }
+  @keyframes heroZoom { to { transform: scale(1); } }
+
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,13,13,0.9) 0%, rgba(13,13,13,0.2) 50%, transparent 100%); }
+
+  .hero-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 0 60px 60px;
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: flex-end; gap: 40px;
+  }
+
+  .hero-breadcrumb {
+    font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 600;
+    color: rgba(255,255,255,0.5); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+    opacity: 0; animation: fadeUp 0.8s 0.4s ease forwards;
+  }
+  .hero-breadcrumb a { color: var(--orange); text-decoration: none; }
+  .hero-breadcrumb span { opacity: 0.4; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--orange); color: var(--white);
+    font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase;
+    padding: 7px 16px; margin-bottom: 16px;
+    opacity: 0; animation: fadeUp 0.8s 0.5s ease forwards;
+  }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.6); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:0.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
+
+  .hero-title {
+    font-family: 'Montserrat', sans-serif; font-size: clamp(48px, 7vw, 96px); font-weight: 700;
+    line-height: 0.95; letter-spacing: -0.03em; color: var(--white);
+    opacity: 0; animation: fadeUp 0.9s 0.65s ease forwards;
+  }
+  .hero-title em { font-style: italic; font-weight: 300; font-family: 'Poppins', sans-serif; color: rgba(255,255,255,0.55); display: block; font-size: 0.62em; letter-spacing: -0.01em; margin-top: 6px; }
+
+  .hero-meta {
+    margin-top: 24px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.8s 0.8s ease forwards;
+  }
+  .hero-meta-item { display: flex; align-items: center; gap: 8px; }
+  .hero-meta-item span { font-family: 'Poppins', sans-serif; font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 300; }
+  .hero-meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--orange); }
+
+  .hero-scroll-cta {
+    opacity: 0; animation: fadeUp 0.8s 1s ease forwards;
+    display: flex; flex-direction: column; align-items: center; gap: 8px; padding-bottom: 8px;
+  }
+  .hero-scroll-cta span { font-family: 'Montserrat', sans-serif; font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.4); writing-mode: vertical-rl; }
+  .scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, var(--orange), transparent); animation: scrollPulse 2s infinite; }
+  @keyframes scrollPulse { 0%,100%{opacity:0.3} 50%{opacity:1} }
+
+  /* STICKY ENQUIRY BAR */
+  .enquiry-bar {
+    position: sticky; top: 72px; z-index: 100; background: var(--white);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 60px; height: 56px;
+    transform: translateY(-8px); opacity: 0;
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .enquiry-bar.visible { opacity: 1; transform: translateY(0); }
+  .eb-left { display: flex; align-items: center; gap: 28px; }
+  .eb-name { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: var(--black); }
+  .eb-status { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); background: var(--orange); padding: 4px 10px; }
+  .eb-tabs { display: flex; gap: 0; }
+  .eb-tab { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); padding: 0 18px; height: 56px; display: flex; align-items: center; border-bottom: 2px solid transparent; text-decoration: none; transition: all 0.25s; }
+  .eb-tab:hover, .eb-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+  .eb-cta { font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700; color: var(--white); background: var(--orange); padding: 10px 24px; text-decoration: none; transition: background 0.25s; white-space: nowrap; }
+  .eb-cta:hover { background: var(--orange-dark); }
+
+  /* OVERVIEW */
+  .overview { display: grid; grid-template-columns: 1fr 380px; gap: 0; }
+  .overview-main { padding: 80px 60px; border-right: 1px solid var(--border); }
+  .overview-sidebar { padding: 80px 40px; background: var(--off-white); }
+
+  .section-tag { font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; font-weight: 700; color: var(--orange); margin-bottom: 18px; display: block; }
+  .section-title { font-family: 'Montserrat', sans-serif; font-size: clamp(28px, 3.5vw, 44px); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+  .section-title em { font-style: italic; font-weight: 300; font-family: 'Poppins', sans-serif; color: var(--orange); }
+
+  .overview-main p { font-size: 15px; line-height: 1.9; color: var(--gray); margin-top: 20px; max-width: 640px; }
+  .overview-main p + p { margin-top: 16px; }
+
+  .overview-highlights { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; margin-top: 52px; background: var(--border); border: 1px solid var(--border); }
+  .oh-item { background: var(--white); padding: 28px 24px; transition: background 0.3s; }
+  .oh-item:hover { background: var(--orange-pale); }
+  .oh-num { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 700; color: var(--orange); line-height: 1; margin-bottom: 6px; }
+  .oh-label { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gray); }
+
+  /* SIDEBAR */
+  .sidebar-card { background: var(--white); border: 1px solid var(--border); border-top: 3px solid var(--orange); padding: 28px; margin-bottom: 16px; }
+  .sidebar-card-title { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--orange); margin-bottom: 18px; }
+  .sidebar-row { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .sidebar-row:last-child { border-bottom: none; }
+  .sidebar-label { font-family: 'Poppins', sans-serif; font-size: 12px; color: var(--gray); }
+  .sidebar-value { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 600; color: var(--black); }
+  .sidebar-value.highlight { color: var(--orange); }
+
+  .enquire-btn { display: block; width: 100%; text-align: center; background: var(--orange); color: var(--white); font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; padding: 16px; text-decoration: none; transition: background 0.25s; margin-top: 16px; }
+  .enquire-btn:hover { background: var(--orange-dark); }
+  .schedule-btn { display: block; width: 100%; text-align: center; border: 1.5px solid var(--black); color: var(--black); font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; padding: 14px; text-decoration: none; transition: all 0.25s; margin-top: 10px; }
+  .schedule-btn:hover { background: var(--black); color: var(--white); }
+
+  .availability-bar { margin-top: 20px; }
+  .avail-label { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); display: flex; justify-content: space-between; margin-bottom: 10px; }
+  .avail-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .avail-fill { height: 100%; background: var(--orange); border-radius: 2px; width: 0; transition: width 1.5s ease; }
+  .avail-fill.animated { width: 31%; }
+
+  /* GALLERY */
+  .gallery { padding: 0 60px 100px; }
+  .gallery-title-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 36px; flex-wrap: wrap; gap: 16px; }
+  .gallery-main-grid { display: grid; grid-template-columns: 1.5fr 1fr; grid-template-rows: 340px 240px; gap: 3px; }
+  .g-img { overflow: hidden; position: relative; cursor: pointer; }
+  .g-img img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.88); transition: transform 0.7s ease, filter 0.5s; display: block; }
+  .g-img:hover img { transform: scale(1.05); filter: brightness(0.75); }
+  .g-img:first-child { grid-row: 1/3; }
+  .g-img-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 14px 16px; background: linear-gradient(transparent, rgba(0,0,0,0.6)); font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.7); opacity: 0; transition: opacity 0.3s; }
+  .g-img:hover .g-img-label { opacity: 1; }
+  .gallery-thumbs { display: grid; grid-template-columns: repeat(4,1fr); gap: 3px; margin-top: 3px; }
+  .g-thumb { overflow: hidden; aspect-ratio: 4/3; position: relative; cursor: pointer; }
+  .g-thumb img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); transition: transform 0.5s, filter 0.4s; display: block; }
+  .g-thumb:hover img { transform: scale(1.08); filter: brightness(0.65); }
+  .g-thumb-more { display: flex; align-items: center; justify-content: center; background: var(--off-white); border: 1px solid var(--border); aspect-ratio: 4/3; cursor: pointer; flex-direction: column; gap: 6px; transition: background 0.3s; }
+  .g-thumb-more:hover { background: var(--orange-pale); }
+  .g-thumb-more span { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 700; color: var(--orange); }
+  .g-thumb-more small { font-family: 'Poppins', sans-serif; font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* FLOOR PLANS */
+  .floor-plans { background: var(--off-white); padding: 100px 60px; }
+  .fp-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin: 36px 0 0; }
+  .fp-tab { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); padding: 14px 28px; border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.25s; background: none; border-top: none; border-left: none; border-right: none; }
+  .fp-tab:hover, .fp-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+  .fp-content { display: none; padding: 48px 0 0; }
+  .fp-content.active { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+  .fp-image { background: var(--white); border: 1px solid var(--border); padding: 40px; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; position: relative; overflow: hidden; }
+  .fp-plan-svg { width: 100%; max-width: 380px; }
+  .fp-details { }
+  .fp-name { font-family: 'Montserrat', sans-serif; font-size: 28px; font-weight: 700; color: var(--black); margin-bottom: 6px; }
+  .fp-sub { font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--gray); margin-bottom: 32px; }
+  .fp-specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .fp-spec { padding: 16px; background: var(--white); border: 1px solid var(--border); }
+  .fp-spec-label { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gray); margin-bottom: 6px; }
+  .fp-spec-value { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 700; color: var(--black); }
+  .fp-inclusions { margin-top: 24px; }
+  .fp-inclusions-title { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+  .fp-inclusion { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--mid); }
+  .fp-inclusion:last-child { border-bottom: none; }
+  .fp-inclusion::before { content: '◆'; font-size: 6px; color: var(--orange); margin-top: 5px; flex-shrink: 0; }
+
+  /* AMENITIES */
+  .amenities { padding: 100px 60px; }
+  .amenities-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; margin-top: 52px; }
+  .amenity-card { padding: 36px 28px; background: var(--off-white); position: relative; overflow: hidden; transition: background 0.3s; }
+  .amenity-card:hover { background: var(--orange-pale); }
+  .amenity-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--orange); transform: scaleX(0); transition: transform 0.4s; transform-origin: left; }
+  .amenity-card:hover::after { transform: scaleX(1); }
+  .amenity-icon { font-size: 24px; margin-bottom: 16px; display: block; }
+  .amenity-title { font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--black); margin-bottom: 8px; }
+  .amenity-desc { font-size: 12px; line-height: 1.65; color: var(--gray); }
+
+  /* TEAM / ARCHITECT */
+  .design-team { background: var(--dark); padding: 100px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .design-team .section-title { color: var(--white); }
+  .design-team p { font-size: 14px; line-height: 1.9; color: rgba(255,255,255,0.55); margin-top: 20px; }
+  .team-cards { display: flex; flex-direction: column; gap: 0; margin-top: 36px; }
+  .team-card { display: flex; gap: 20px; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.07); align-items: center; }
+  .team-card:last-child { border-bottom: none; }
+  .tc-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; filter: grayscale(20%); flex-shrink: 0; }
+  .tc-role-tag { font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 3px; }
+  .tc-name { font-family: 'Montserrat', sans-serif; font-size: 14px; font-weight: 700; color: var(--white); }
+  .tc-firm { font-family: 'Poppins', sans-serif; font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 300; }
+
+  .design-right { position: relative; }
+  .design-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; filter: brightness(0.75); display: block; }
+  .design-quote { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(13,13,13,0.92); padding: 28px 28px; }
+  .design-quote p { font-family: 'Poppins', sans-serif; font-size: 13px; font-style: italic; color: rgba(255,255,255,0.75); line-height: 1.7; }
+  .design-quote cite { display: block; font-family: 'Montserrat', sans-serif; font-size: 9px; font-style: normal; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-top: 10px; }
+
+  /* LOCATION */
+  .location { padding: 100px 60px; background: var(--off-white); }
+  .location-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 52px; align-items: start; }
+  .location-map { position: relative; background: var(--dark); aspect-ratio: 4/3; overflow: hidden; }
+  .location-map img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5) grayscale(40%); }
+  .location-map-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .map-pin { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .map-pin-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 4px rgba(232,96,28,0.3), 0 0 0 8px rgba(232,96,28,0.1); animation: mapPulse 2s infinite; }
+  @keyframes mapPulse { 0%,100%{box-shadow:0 0 0 4px rgba(232,96,28,0.3),0 0 0 8px rgba(232,96,28,0.1)} 50%{box-shadow:0 0 0 8px rgba(232,96,28,0.3),0 0 0 16px rgba(232,96,28,0.1)} }
+  .map-pin-label { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700; color: var(--white); background: var(--orange); padding: 4px 12px; white-space: nowrap; }
+
+  .location-points { display: flex; flex-direction: column; gap: 0; }
+  .location-category { margin-bottom: 28px; }
+  .loc-cat-title { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+  .loc-point { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .loc-point:last-child { border-bottom: none; }
+  .loc-point-name { font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid); }
+  .loc-point-dist { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; color: var(--gray); }
+  .loc-point-dist span { color: var(--orange); font-weight: 700; }
+
+  /* TESTIMONIALS */
+  .testimonials { padding: 100px 60px; }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 52px; }
+  .test-card { padding: 40px 32px; background: var(--off-white); position: relative; overflow: hidden; }
+  .test-quote-mark { font-family: 'Poppins', sans-serif; font-size: 60px; line-height: 0.7; color: var(--orange); opacity: 0.2; margin-bottom: 20px; display: block; }
+  .test-text { font-size: 14px; line-height: 1.8; color: var(--mid); font-style: italic; font-weight: 300; }
+  .test-author { margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px; }
+  .test-name { font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 700; color: var(--black); }
+  .test-unit { font-family: 'Poppins', sans-serif; font-size: 11px; color: var(--orange); margin-top: 2px; }
+
+  /* RELATED */
+  .related { background: var(--off-white); padding: 100px 60px; }
+  .related-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; margin-top: 48px; }
+  .related-card { position: relative; overflow: hidden; cursor: pointer; text-decoration: none; display: block; }
+  .related-img { width: 100%; aspect-ratio: 4/3; object-fit: cover; filter: brightness(0.72); display: block; transition: transform 0.6s, filter 0.5s; }
+  .related-card:hover .related-img { transform: scale(1.05); filter: brightness(0.55); }
+  .related-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(13,13,13,0.9) 0%, transparent 55%); padding: 20px; display: flex; flex-direction: column; justify-content: flex-end; }
+  .related-type { font-family: 'Montserrat', sans-serif; font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; font-weight: 700; color: var(--orange); margin-bottom: 5px; }
+  .related-name { font-family: 'Montserrat', sans-serif; font-size: 18px; font-weight: 700; color: var(--white); line-height: 1.2; margin-bottom: 3px; }
+  .related-loc { font-family: 'Poppins', sans-serif; font-size: 12px; color: rgba(255,255,255,0.6); font-weight: 300; }
+
+  /* CTA */
+  .cta-band { background: var(--orange); padding: 80px 60px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+  .cta-band h2 { font-family: 'Montserrat', sans-serif; font-size: clamp(26px, 3.5vw, 46px); font-weight: 700; color: var(--white); line-height: 1.1; }
+  .cta-band h2 em { font-style: italic; font-weight: 300; font-family: 'Poppins', sans-serif; }
+  .cta-band p { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 12px; max-width: 500px; font-weight: 300; }
+  .cta-actions { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+  .btn-white { font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 700; color: var(--orange); background: var(--white); padding: 16px 36px; text-decoration: none; display: inline-block; transition: all 0.25s; white-space: nowrap; }
+  .btn-white:hover { background: var(--black); color: var(--white); }
+  .btn-outline-white { font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600; color: var(--white); border: 1.5px solid rgba(255,255,255,0.5); padding: 14px 36px; text-decoration: none; display: inline-block; transition: all 0.25s; white-space: nowrap; }
+  .btn-outline-white:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
+
+  /* FOOTER */
+  footer { background: var(--dark); padding: 60px 60px 36px; }
+  .footer-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 44px; flex-wrap: wrap; gap: 36px; }
+  .footer-logo { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--white); text-decoration: none; }
+  .footer-logo span { color: var(--orange); }
+  .footer-links { display: flex; gap: 48px; flex-wrap: wrap; }
+  .footer-col h4 { font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 700; color: var(--orange); margin-bottom: 18px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a { font-family: 'Poppins', sans-serif; font-size: 13px; color: #888; text-decoration: none; font-weight: 300; transition: color 0.25s; }
+  .footer-col a:hover { color: var(--white); }
+  .footer-bottom { border-top: 1px solid #2e2e2e; padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  .footer-copy { font-family: 'Poppins', sans-serif; font-size: 12px; color: #666; font-weight: 300; }
+  .footer-legal { display: flex; gap: 20px; flex-wrap: wrap; }
+  .footer-legal a { font-family: 'Poppins', sans-serif; font-size: 12px; color: #666; text-decoration: none; transition: color 0.25s; }
+  .footer-legal a:hover { color: #aaa; }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.75s ease, transform 0.75s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* LIGHTBOX */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; }
+  .lightbox.open { display: flex; }
+  .lightbox-img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .lightbox-close { position: absolute; top: 24px; right: 28px; font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.6); cursor: pointer; transition: color 0.2s; background: none; border: none; }
+  .lightbox-close:hover { color: var(--orange); }
+  .lightbox-prev, .lightbox-next { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); width: 48px; height: 48px; font-size: 18px; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; }
+  .lightbox-prev { left: 24px; }
+  .lightbox-next { right: 24px; }
+  .lightbox-prev:hover, .lightbox-next:hover { background: var(--orange); border-color: var(--orange); color: var(--white); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    nav { padding: 0 36px; } .nav-links { gap: 24px; }
+    .overview { grid-template-columns: 1fr 340px; }
+    .overview-main, .overview-sidebar { padding: 60px 40px; }
+    .gallery, .floor-plans, .amenities, .location, .testimonials, .related { padding-left: 40px; padding-right: 40px; }
+    .design-team { padding: 80px 40px; }
+    .cta-band { padding: 60px 40px; }
+    footer { padding: 50px 40px 30px; }
+    .hero-content { padding: 0 40px 50px; }
+    .enquiry-bar { padding: 0 40px; }
+  }
+  @media (max-width: 900px) {
+    nav { padding: 0 28px; } .nav-links, .nav-cta { display: none; } .nav-hamburger { display: flex; } .mobile-menu { display: flex; }
+    .hero-content { grid-template-columns: 1fr; padding: 0 28px 44px; }
+    .hero-scroll-cta { display: none; }
+    .enquiry-bar { display: none; }
+    .overview { grid-template-columns: 1fr; }
+    .overview-sidebar { border-top: 1px solid var(--border); }
+    .overview-main, .overview-sidebar { padding: 52px 28px; }
+    .gallery, .floor-plans, .amenities, .location, .testimonials, .related { padding-left: 28px; padding-right: 28px; }
+    .gallery-main-grid { grid-template-columns: 1fr; grid-template-rows: 300px 220px 220px; }
+    .g-img:first-child { grid-row: auto; }
+    .gallery-thumbs { grid-template-columns: repeat(3,1fr); }
+    .fp-content.active { grid-template-columns: 1fr; }
+    .amenities-grid { grid-template-columns: repeat(2,1fr); }
+    .design-team { grid-template-columns: 1fr; padding: 72px 28px; }
+    .location-grid { grid-template-columns: 1fr; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .related-grid { grid-template-columns: 1fr 1fr; }
+    .cta-band { grid-template-columns: 1fr; padding: 52px 28px; }
+    footer { padding: 44px 28px 28px; } .footer-top { flex-direction: column; } .footer-links { gap: 36px; }
+    .overview-highlights { grid-template-columns: repeat(3,1fr); }
+  }
+  @media (max-width: 600px) {
+    nav { height: 64px; padding: 0 20px; } .nav-logo { font-size: 15px; } .mobile-menu { top: 64px; }
+    .hero { height: 100svh; }
+    .hero-content { padding: 0 20px 36px; }
+    .hero-title { font-size: clamp(40px, 11vw, 60px); }
+    .overview-main, .overview-sidebar { padding: 44px 20px; }
+    .gallery, .floor-plans, .amenities, .location, .testimonials, .related { padding-left: 20px; padding-right: 20px; padding-top: 64px; padding-bottom: 64px; }
+    .gallery-thumbs { grid-template-columns: repeat(2,1fr); }
+    .amenities-grid { grid-template-columns: 1fr 1fr; }
+    .overview-highlights { grid-template-columns: 1fr; }
+    .fp-specs-grid { grid-template-columns: 1fr 1fr; }
+    .design-team { padding: 64px 20px; }
+    .related-grid { grid-template-columns: 1fr; }
+    .cta-band { padding: 44px 20px; }
+    footer { padding: 36px 20px 24px; } .footer-links { flex-direction: column; gap: 28px; } .footer-bottom { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">✕ Close</button>
+  <button class="lightbox-prev" id="lightboxPrev">‹</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <button class="lightbox-next" id="lightboxNext">›</button>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="luxury-dev-website.html" class="nav-logo">Meri<span>·</span>dian</a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="projects.html" class="active">Projects</a></li>
+    <li><a href="process.html">Process</a></li>
+    <li><a href="investors.html">Investors</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Enquire Now</a>
+  <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<ul class="mobile-menu" id="mobileMenu">
+  <li><a href="about.html" class="mobile-link">About</a></li>
+  <li><a href="projects.html" class="mobile-link">Projects</a></li>
+  <li><a href="process.html" class="mobile-link">Process</a></li>
+  <li><a href="investors.html" class="mobile-link">Investors</a></li>
+  <a href="contact.html" class="mobile-cta mobile-link">Enquire Now</a>
+</ul>
+
+<!-- HERO -->
+<section class="hero" id="heroSection">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-breadcrumb">
+        <a href="projects.html">Projects</a>
+        <span>›</span>
+        The Alderton
+      </div>
+      <div class="hero-badge">Now Selling</div>
+      <h1 class="hero-title">The Alderton<em>Upper East Side, New York</em></h1>
+      <div class="hero-meta">
+        <div class="hero-meta-item"><span>48 Residences</span></div>
+        <div class="hero-meta-dot"></div>
+        <div class="hero-meta-item"><span>From $4.2M</span></div>
+        <div class="hero-meta-dot"></div>
+        <div class="hero-meta-item"><span>Completion Q3 2025</span></div>
+        <div class="hero-meta-dot"></div>
+        <div class="hero-meta-item"><span>David Collins Studio</span></div>
+      </div>
+    </div>
+    <div class="hero-scroll-cta">
+      <span>Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STICKY ENQUIRY BAR -->
+<div class="enquiry-bar" id="enquiryBar">
+  <div class="eb-left">
+    <div class="eb-name">The Alderton</div>
+    <div class="eb-status">Now Selling</div>
+    <nav class="eb-tabs">
+      <a href="#overview" class="eb-tab active">Overview</a>
+      <a href="#gallery" class="eb-tab">Gallery</a>
+      <a href="#floor-plans" class="eb-tab">Floor Plans</a>
+      <a href="#amenities" class="eb-tab">Amenities</a>
+      <a href="#location" class="eb-tab">Location</a>
+    </nav>
+  </div>
+  <a href="contact.html" class="eb-cta">Request Information</a>
+</div>
+
+<!-- OVERVIEW -->
+<div class="overview" id="overview">
+  <div class="overview-main">
+    <div class="reveal">
+      <span class="section-tag">The Residence</span>
+      <h2 class="section-title">Penthouse Living<br><em>Redefined</em></h2>
+    </div>
+    <p class="reveal">The Alderton presents 48 meticulously designed penthouse residences atop a landmark tower on Fifth Avenue. Each home features floor-to-ceiling glazing, private terraces with panoramic Central Park views, and interiors crafted by the David Collins Studio — one of the world's most celebrated luxury design practices.</p>
+    <p class="reveal">Rising 62 storeys above the Upper East Side, The Alderton represents the culmination of Meridian's design philosophy: uncompromising architecture that engages its setting while creating homes of lasting beauty and value. Every residence occupies a full floor or a curated half-floor configuration, ensuring privacy and light from every aspect.</p>
+    <p class="reveal">Residents enter through a private porte-cochère into a double-height lobby of book-matched Calacatta marble. The building's amenity programme — spanning 28,000 sq ft across four dedicated levels — rivals the finest private members' clubs in the city.</p>
+    <div class="overview-highlights reveal">
+      <div class="oh-item"><div class="oh-num">48</div><div class="oh-label">Total Residences</div></div>
+      <div class="oh-item"><div class="oh-num">62</div><div class="oh-label">Storeys</div></div>
+      <div class="oh-item"><div class="oh-num">15</div><div class="oh-label">Available Now</div></div>
+    </div>
+  </div>
+  <div class="overview-sidebar reveal">
+    <div class="sidebar-card">
+      <div class="sidebar-card-title">Key Details</div>
+      <div class="sidebar-row"><span class="sidebar-label">Status</span><span class="sidebar-value highlight">Now Selling</span></div>
+      <div class="sidebar-row"><span class="sidebar-label">Type</span><span class="sidebar-value">Penthouse Collection</span></div>
+      <div class="sidebar-row"><span class="sidebar-label">Address</span><span class="sidebar-value">895 Fifth Avenue, NY</span></div>
+      <div class="sidebar-row"><span class="sidebar-label">Storeys</span><span class="sidebar-value">62</span></div>
+      <div class="sidebar-row"><span class="sidebar-label">Residences</span><span class="sidebar-value">48 Total</span></div>
+      <div class="sidebar-row"><span class="sidebar-label">Starting Price</span><span class="sidebar-value highlight">From $4.2M</span></div>
+      <div class="sidebar-row"><span class="sidebar-label">Completion</span><span class="sidebar-value">Q3 2025</span></div>
+      <div class="sidebar-row"><span class="sidebar-label">Architect</span><span class="sidebar-value">BIG — Bjarke Ingels</span></div>
+      <div class="sidebar-row"><span class="sidebar-label">Interiors</span><span class="sidebar-value">David Collins Studio</span></div>
+    </div>
+    <div class="availability-bar">
+      <div class="avail-label"><span>Availability</span><span>15 of 48 Remaining</span></div>
+      <div class="avail-track"><div class="avail-fill" id="availFill"></div></div>
+    </div>
+    <a href="contact.html" class="enquire-btn">Request Information</a>
+    <a href="contact.html" class="schedule-btn">Schedule a Viewing</a>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="gallery-title-row reveal">
+    <div><span class="section-tag">Photography</span><h2 class="section-title">Interiors &<br><em>Architecture</em></h2></div>
+    <a href="#" class="projects-link" style="font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;color:var(--orange);text-decoration:none;">View All Images →</a>
+  </div>
+  <div class="gallery-main-grid reveal">
+    <div class="g-img" data-src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=85">
+      <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=80" alt="The Alderton Facade">
+      <div class="g-img-label">Building Facade</div>
+    </div>
+    <div class="g-img" data-src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=85">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&q=80" alt="Living Room">
+      <div class="g-img-label">Living Room — Penthouse 48A</div>
+    </div>
+    <div class="g-img" data-src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1400&q=85">
+      <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=700&q=80" alt="Primary Suite">
+      <div class="g-img-label">Primary Suite</div>
+    </div>
+  </div>
+  <div class="gallery-thumbs reveal">
+    <div class="g-thumb" data-src="https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=1200&q=85">
+      <img src="https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=400&q=75" alt="Kitchen">
+    </div>
+    <div class="g-thumb" data-src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=1200&q=85">
+      <img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=400&q=75" alt="Terrace">
+    </div>
+    <div class="g-thumb" data-src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1200&q=85">
+      <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=400&q=75" alt="Exterior Detail">
+    </div>
+    <div class="g-thumb-more">
+      <span>+14</span>
+      <small>More Photos</small>
+    </div>
+  </div>
+</section>
+
+<!-- FLOOR PLANS -->
+<section class="floor-plans" id="floor-plans">
+  <div class="reveal">
+    <span class="section-tag">Residences</span>
+    <h2 class="section-title">Floor Plan<br><em>Configurations</em></h2>
+  </div>
+  <div class="fp-tabs reveal">
+    <button class="fp-tab active" data-plan="two-bed">Two Bedroom</button>
+    <button class="fp-tab" data-plan="three-bed">Three Bedroom</button>
+    <button class="fp-tab" data-plan="four-bed">Four Bedroom</button>
+    <button class="fp-tab" data-plan="penthouse">Full-Floor Penthouse</button>
+  </div>
+
+  <div class="fp-content active reveal" id="plan-two-bed">
+    <div class="fp-image">
+      <!-- SVG Floor Plan -->
+      <svg class="fp-plan-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="20" width="360" height="360" fill="none" stroke="#e4e4e4" stroke-width="2"/>
+        <!-- Living Area -->
+        <rect x="30" y="30" width="200" height="140" fill="#fff4ee" stroke="#E8601C" stroke-width="1.5"/>
+        <text x="130" y="105" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">LIVING / DINING</text>
+        <!-- Kitchen -->
+        <rect x="230" y="30" width="140" height="80" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="300" y="75" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">KITCHEN</text>
+        <!-- Primary -->
+        <rect x="30" y="180" width="160" height="130" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="110" y="250" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">PRIMARY</text>
+        <!-- Bed 2 -->
+        <rect x="200" y="180" width="110" height="110" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="255" y="240" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">BED 2</text>
+        <!-- Terrace -->
+        <rect x="30" y="320" width="340" height="60" fill="none" stroke="#E8601C" stroke-width="1.5" stroke-dasharray="6,4"/>
+        <text x="200" y="355" font-family="Montserrat" font-size="9" fill="#E8601C" text-anchor="middle" letter-spacing="1">PRIVATE TERRACE</text>
+        <!-- Bathrooms -->
+        <rect x="200" y="120" width="80" height="50" fill="#f0f0f0" stroke="#e4e4e4" stroke-width="1"/>
+        <text x="240" y="149" font-family="Montserrat" font-size="7" fill="#aaa" text-anchor="middle">BATH</text>
+        <rect x="320" y="120" width="50" height="50" fill="#f0f0f0" stroke="#e4e4e4" stroke-width="1"/>
+        <text x="345" y="149" font-family="Montserrat" font-size="7" fill="#aaa" text-anchor="middle">WC</text>
+        <!-- North arrow -->
+        <text x="370" y="50" font-family="Montserrat" font-size="10" fill="#E8601C" font-weight="700" text-anchor="middle">N</text>
+        <line x1="370" y1="55" x2="370" y2="70" stroke="#E8601C" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="fp-details">
+      <div class="fp-name">Two Bedroom</div>
+      <div class="fp-sub">Floors 18–38 · Half-Floor Configuration</div>
+      <div class="fp-specs-grid">
+        <div class="fp-spec"><div class="fp-spec-label">Interior</div><div class="fp-spec-value">2,840 ft²</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Terrace</div><div class="fp-spec-value">680 ft²</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Bedrooms</div><div class="fp-spec-value">2</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Bathrooms</div><div class="fp-spec-value">2.5</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Starting From</div><div class="fp-spec-value" style="color:var(--orange)">$4.2M</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Available</div><div class="fp-spec-value">5 Units</div></div>
+      </div>
+      <div class="fp-inclusions">
+        <div class="fp-inclusions-title">Included Finishes</div>
+        <div class="fp-inclusion">Calacatta marble flooring throughout principal rooms</div>
+        <div class="fp-inclusion">Custom David Collins Studio cabinetry and millwork</div>
+        <div class="fp-inclusion">Gaggenau appliance suite with integrated espresso bar</div>
+        <div class="fp-inclusion">Floor-to-ceiling triple-glazed curtain wall</div>
+        <div class="fp-inclusion">Private terrace with outdoor kitchen provisions</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fp-content reveal" id="plan-three-bed">
+    <div class="fp-image">
+      <svg class="fp-plan-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="20" width="360" height="360" fill="none" stroke="#e4e4e4" stroke-width="2"/>
+        <rect x="30" y="30" width="230" height="150" fill="#fff4ee" stroke="#E8601C" stroke-width="1.5"/>
+        <text x="145" y="110" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">LIVING / DINING</text>
+        <rect x="270" y="30" width="100" height="90" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="320" y="79" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">KITCHEN</text>
+        <rect x="30" y="190" width="150" height="120" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="105" y="255" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">PRIMARY</text>
+        <rect x="190" y="190" width="100" height="100" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="240" y="245" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">BED 2</text>
+        <rect x="300" y="190" width="70" height="100" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="335" y="245" font-family="Montserrat" font-size="8" fill="#888" text-anchor="middle" letter-spacing="1">BED 3</text>
+        <rect x="30" y="320" width="340" height="60" fill="none" stroke="#E8601C" stroke-width="1.5" stroke-dasharray="6,4"/>
+        <text x="200" y="355" font-family="Montserrat" font-size="9" fill="#E8601C" text-anchor="middle" letter-spacing="1">PRIVATE TERRACE</text>
+        <text x="370" y="50" font-family="Montserrat" font-size="10" fill="#E8601C" font-weight="700" text-anchor="middle">N</text>
+        <line x1="370" y1="55" x2="370" y2="70" stroke="#E8601C" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="fp-details">
+      <div class="fp-name">Three Bedroom</div>
+      <div class="fp-sub">Floors 39–52 · Three-Quarter Floor</div>
+      <div class="fp-specs-grid">
+        <div class="fp-spec"><div class="fp-spec-label">Interior</div><div class="fp-spec-value">3,920 ft²</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Terrace</div><div class="fp-spec-value">940 ft²</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Bedrooms</div><div class="fp-spec-value">3</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Bathrooms</div><div class="fp-spec-value">3.5</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Starting From</div><div class="fp-spec-value" style="color:var(--orange)">$7.8M</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Available</div><div class="fp-spec-value">6 Units</div></div>
+      </div>
+      <div class="fp-inclusions">
+        <div class="fp-inclusions-title">Included Finishes</div>
+        <div class="fp-inclusion">Honed Statuario marble throughout</div>
+        <div class="fp-inclusion">Full David Collins Studio interior package</div>
+        <div class="fp-inclusion">Private study / library with custom shelving</div>
+        <div class="fp-inclusion">Smart home integration — Crestron platform</div>
+        <div class="fp-inclusion">Dedicated laundry room and staff entrance</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fp-content reveal" id="plan-four-bed">
+    <div class="fp-image">
+      <svg class="fp-plan-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="380" height="380" fill="none" stroke="#e4e4e4" stroke-width="2"/>
+        <rect x="20" y="20" width="200" height="130" fill="#fff4ee" stroke="#E8601C" stroke-width="1.5"/>
+        <text x="120" y="89" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">LIVING</text>
+        <rect x="230" y="20" width="150" height="80" fill="#fff4ee" stroke="#E8601C" stroke-width="1.5"/>
+        <text x="305" y="64" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">DINING</text>
+        <rect x="230" y="110" width="150" height="50" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="305" y="139" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">KITCHEN</text>
+        <rect x="20" y="160" width="130" height="110" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="85" y="220" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">PRIMARY</text>
+        <rect x="160" y="160" width="100" height="90" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="210" y="210" font-family="Montserrat" font-size="8" fill="#888" text-anchor="middle" letter-spacing="1">BED 2</text>
+        <rect x="270" y="160" width="110" height="90" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="325" y="210" font-family="Montserrat" font-size="8" fill="#888" text-anchor="middle" letter-spacing="1">BED 3</text>
+        <rect x="20" y="280" width="130" height="100" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="85" y="335" font-family="Montserrat" font-size="8" fill="#888" text-anchor="middle" letter-spacing="1">BED 4</text>
+        <rect x="160" y="280" width="220" height="100" fill="none" stroke="#E8601C" stroke-width="1.5" stroke-dasharray="6,4"/>
+        <text x="270" y="335" font-family="Montserrat" font-size="9" fill="#E8601C" text-anchor="middle" letter-spacing="1">TERRACE</text>
+        <text x="375" y="32" font-family="Montserrat" font-size="10" fill="#E8601C" font-weight="700" text-anchor="middle">N</text>
+        <line x1="375" y1="37" x2="375" y2="52" stroke="#E8601C" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="fp-details">
+      <div class="fp-name">Four Bedroom</div>
+      <div class="fp-sub">Floors 53–60 · Full-Floor</div>
+      <div class="fp-specs-grid">
+        <div class="fp-spec"><div class="fp-spec-label">Interior</div><div class="fp-spec-value">5,600 ft²</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Terrace</div><div class="fp-spec-value">1,240 ft²</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Bedrooms</div><div class="fp-spec-value">4</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Bathrooms</div><div class="fp-spec-value">4.5</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Starting From</div><div class="fp-spec-value" style="color:var(--orange)">$14.5M</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Available</div><div class="fp-spec-value">3 Units</div></div>
+      </div>
+      <div class="fp-inclusions">
+        <div class="fp-inclusions-title">Included Finishes</div>
+        <div class="fp-inclusion">Bespoke stone selection with dedicated design consultation</div>
+        <div class="fp-inclusion">Private wine room with climate control</div>
+        <div class="fp-inclusion">Staff suite with separate entrance and kitchen</div>
+        <div class="fp-inclusion">4-car underground parking allocation</div>
+        <div class="fp-inclusion">Priority concierge and resident services</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fp-content reveal" id="plan-penthouse">
+    <div class="fp-image">
+      <svg class="fp-plan-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="380" height="380" fill="none" stroke="#E8601C" stroke-width="2.5"/>
+        <rect x="20" y="20" width="240" height="160" fill="#fff4ee" stroke="#E8601C" stroke-width="1.5"/>
+        <text x="140" y="105" font-family="Montserrat" font-size="10" fill="#888" text-anchor="middle" letter-spacing="1">GREAT ROOM</text>
+        <rect x="270" y="20" width="110" height="100" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="325" y="74" font-family="Montserrat" font-size="8" fill="#888" text-anchor="middle" letter-spacing="1">CHEF'S KITCHEN</text>
+        <rect x="270" y="130" width="110" height="60" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="325" y="163" font-family="Montserrat" font-size="8" fill="#888" text-anchor="middle">LIBRARY</text>
+        <rect x="20" y="190" width="160" height="120" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="100" y="255" font-family="Montserrat" font-size="9" fill="#888" text-anchor="middle" letter-spacing="1">MASTER SUITE</text>
+        <rect x="190" y="190" width="80" height="80" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="230" y="234" font-family="Montserrat" font-size="8" fill="#888" text-anchor="middle">BED 2</text>
+        <rect x="280" y="190" width="100" height="80" fill="#f8f7f5" stroke="#e4e4e4" stroke-width="1.5"/>
+        <text x="330" y="234" font-family="Montserrat" font-size="8" fill="#888" text-anchor="middle">BED 3–5</text>
+        <rect x="20" y="320" width="360" height="70" fill="none" stroke="#E8601C" stroke-width="2" stroke-dasharray="8,4"/>
+        <text x="200" y="360" font-family="Montserrat" font-size="10" fill="#E8601C" text-anchor="middle" letter-spacing="2" font-weight="600">WRAPAROUND TERRACE</text>
+        <text x="375" y="25" font-family="Montserrat" font-size="10" fill="#E8601C" font-weight="700" text-anchor="middle">N</text>
+        <line x1="375" y1="30" x2="375" y2="45" stroke="#E8601C" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="fp-details">
+      <div class="fp-name">Full-Floor Penthouse</div>
+      <div class="fp-sub">Floors 61–62 · 5 Bedrooms · Signature Collection</div>
+      <div class="fp-specs-grid">
+        <div class="fp-spec"><div class="fp-spec-label">Interior</div><div class="fp-spec-value">8,200 ft²</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Terrace</div><div class="fp-spec-value">2,100 ft²</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Bedrooms</div><div class="fp-spec-value">5</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Bathrooms</div><div class="fp-spec-value">6</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Price on Request</div><div class="fp-spec-value" style="color:var(--orange)">POA</div></div>
+        <div class="fp-spec"><div class="fp-spec-label">Available</div><div class="fp-spec-value">1 of 2</div></div>
+      </div>
+      <div class="fp-inclusions">
+        <div class="fp-inclusions-title">The Penthouse Standard</div>
+        <div class="fp-inclusion">Fully bespoke David Collins Studio interior — no fixed specification</div>
+        <div class="fp-inclusion">Private rooftop pool and outdoor entertaining terrace</div>
+        <div class="fp-inclusion">Dedicated elevator lobby and private entrance</div>
+        <div class="fp-inclusion">6-car private garage with electric charging</div>
+        <div class="fp-inclusion">24/7 dedicated house manager and concierge team</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AMENITIES -->
+<section class="amenities" id="amenities">
+  <div class="reveal">
+    <span class="section-tag">Building Amenities</span>
+    <h2 class="section-title">28,000 sq ft of<br><em>Exceptional Living</em></h2>
+  </div>
+  <div class="amenities-grid reveal">
+    <div class="amenity-card"><span class="amenity-icon">◈</span><div class="amenity-title">Residents' Club</div><p class="amenity-desc">A 6,000 sq ft private members' lounge with dining room, cocktail bar, and wine cellar — exclusively for residents.</p></div>
+    <div class="amenity-card"><span class="amenity-icon">◆</span><div class="amenity-title">Fitness & Wellness</div><p class="amenity-desc">Full-floor wellness centre with 75-foot lap pool, hot tub, sauna suite, and private treatment rooms.</p></div>
+    <div class="amenity-card"><span class="amenity-icon">✦</span><div class="amenity-title">Private Dining</div><p class="amenity-desc">Resident-only private dining room with in-house culinary team available for private events and regular service.</p></div>
+    <div class="amenity-card"><span class="amenity-icon">▲</span><div class="amenity-title">Screening Room</div><p class="amenity-desc">40-seat private cinema with Dolby Atmos sound, available for resident bookings seven days a week.</p></div>
+    <div class="amenity-card"><span class="amenity-icon">●</span><div class="amenity-title">Children's Suite</div><p class="amenity-desc">Dedicated children's programme room, playroom, and supervised after-school services for resident families.</p></div>
+    <div class="amenity-card"><span class="amenity-icon">◉</span><div class="amenity-title">Sky Terrace</div><p class="amenity-desc">Residents' rooftop terrace on the 61st floor with 360° views of Central Park and the Manhattan skyline.</p></div>
+    <div class="amenity-card"><span class="amenity-icon">◈</span><div class="amenity-title">Concierge Services</div><p class="amenity-desc">White-glove 24/7 concierge team to manage travel, restaurant bookings, household services, and all resident requests.</p></div>
+    <div class="amenity-card"><span class="amenity-icon">◆</span><div class="amenity-title">Valet Parking</div><p class="amenity-desc">Full-service valet parking with electric vehicle charging. Private garage allocations available for penthouse residences.</p></div>
+  </div>
+</section>
+
+<!-- DESIGN TEAM -->
+<section class="design-team" id="design-team">
+  <div class="reveal">
+    <span class="section-tag" style="color:var(--orange)">Design Excellence</span>
+    <h2 class="section-title">The Creative<br><em>Partnership</em></h2>
+    <p>The Alderton brings together two of the world's most celebrated design practices — commissioning the finest architectural and interior talent to realise Meridian's most ambitious project to date.</p>
+    <div class="team-cards">
+      <div class="team-card">
+        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=75" alt="BIG" class="tc-avatar">
+        <div>
+          <div class="tc-role-tag">Architecture</div>
+          <div class="tc-name">BIG — Bjarke Ingels Group</div>
+          <div class="tc-firm">Copenhagen / New York / London</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <img src="https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=200&q=75" alt="David Collins" class="tc-avatar">
+        <div>
+          <div class="tc-role-tag">Interior Design</div>
+          <div class="tc-name">David Collins Studio</div>
+          <div class="tc-firm">London / New York</div>
+        </div>
+      </div>
+      <div class="team-card">
+        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=75" alt="Aecom" class="tc-avatar">
+        <div>
+          <div class="tc-role-tag">Structural Engineering</div>
+          <div class="tc-name">Thornton Tomasetti</div>
+          <div class="tc-firm">New York</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="design-right reveal">
+    <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80" alt="Design process" class="design-img">
+    <div class="design-quote">
+      <p>"The Alderton is a building that speaks in a quiet voice — confident in its restraint, extraordinary in its precision. Every line is deliberate."</p>
+      <cite>Bjarke Ingels — BIG</cite>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="location" id="location">
+  <div class="reveal">
+    <span class="section-tag">Location</span>
+    <h2 class="section-title">The Upper East Side<br><em>Address</em></h2>
+  </div>
+  <div class="location-grid reveal">
+    <div class="location-map">
+      <img src="https://images.unsplash.com/photo-1534430480872-3498386e7856?w=900&q=80" alt="Upper East Side">
+      <div class="location-map-overlay">
+        <div class="map-pin">
+          <div class="map-pin-dot"></div>
+          <div class="map-pin-label">The Alderton · 895 Fifth Ave</div>
+        </div>
+      </div>
+    </div>
+    <div class="location-points">
+      <div class="location-category">
+        <div class="loc-cat-title">Parks & Recreation</div>
+        <div class="loc-point"><span class="loc-point-name">Central Park — 72nd Street Entrance</span><span class="loc-point-dist"><span>2</span> min walk</span></div>
+        <div class="loc-point"><span class="loc-point-name">The Reservoir</span><span class="loc-point-dist"><span>5</span> min walk</span></div>
+        <div class="loc-point"><span class="loc-point-name">Carl Schurz Park</span><span class="loc-point-dist"><span>12</span> min walk</span></div>
+      </div>
+      <div class="location-category">
+        <div class="loc-cat-title">Culture & Dining</div>
+        <div class="loc-point"><span class="loc-point-name">The Metropolitan Museum of Art</span><span class="loc-point-dist"><span>4</span> min walk</span></div>
+        <div class="loc-point"><span class="loc-point-name">Café Boulud</span><span class="loc-point-dist"><span>2</span> min walk</span></div>
+        <div class="loc-point"><span class="loc-point-name">The Carlyle Hotel</span><span class="loc-point-dist"><span>3</span> min walk</span></div>
+        <div class="loc-point"><span class="loc-point-name">Orsay Restaurant</span><span class="loc-point-dist"><span>4</span> min walk</span></div>
+      </div>
+      <div class="location-category">
+        <div class="loc-cat-title">Transportation</div>
+        <div class="loc-point"><span class="loc-point-name">4/5/6 Subway — 77th Street</span><span class="loc-point-dist"><span>3</span> min walk</span></div>
+        <div class="loc-point"><span class="loc-point-name">JFK Airport</span><span class="loc-point-dist"><span>35</span> min drive</span></div>
+        <div class="loc-point"><span class="loc-point-name">Teterboro Airport (TEB)</span><span class="loc-point-dist"><span>22</span> min drive</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="reveal">
+    <span class="section-tag">Resident Voices</span>
+    <h2 class="section-title">What Our<br><em>Residents Say</em></h2>
+  </div>
+  <div class="testimonials-grid reveal">
+    <div class="test-card">
+      <span class="test-quote-mark">"</span>
+      <p class="test-text">The quality of craftsmanship at The Alderton surpassed anything I'd seen at this price point in New York. The stone alone — it looks like it was designed by a sculptor, not a contractor.</p>
+      <div class="test-author">
+        <div class="test-name">James & Catherine Whitmore</div>
+        <div class="test-unit">Penthouse 48A · Purchased 2024</div>
+      </div>
+    </div>
+    <div class="test-card">
+      <span class="test-quote-mark">"</span>
+      <p class="test-text">From the first viewing through to completion, Meridian's sales team was exceptional. Everything they promised, they delivered — on time, without compromise.</p>
+      <div class="test-author">
+        <div class="test-name">Dr. Aisha Okonkwo</div>
+        <div class="test-unit">Residence 3402 · Purchased 2024</div>
+      </div>
+    </div>
+    <div class="test-card">
+      <span class="test-quote-mark">"</span>
+      <p class="test-text">We've lived in luxury buildings across three continents. The Alderton is categorically different — the attention to service and the building's community feel are genuinely rare.</p>
+      <div class="test-author">
+        <div class="test-name">Marcus & Helena Lindqvist</div>
+        <div class="test-unit">Residence 5601 · Purchased 2024</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RELATED -->
+<section class="related">
+  <div class="reveal">
+    <span class="section-tag">Explore More</span>
+    <h2 class="section-title">Other<br><em>Projects</em></h2>
+  </div>
+  <div class="related-grid reveal">
+    <a href="project-detail.html" class="related-card">
+      <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=700&q=80" alt="One Meridian" class="related-img">
+      <div class="related-overlay"><span class="related-type">Luxury Condominium</span><div class="related-name">One Meridian</div><div class="related-loc">Tribeca, New York · Pre-Sale</div></div>
+    </a>
+    <a href="project-detail.html" class="related-card">
+      <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=700&q=80" alt="The Carlyle Residences" class="related-img">
+      <div class="related-overlay"><span class="related-type">Full-Floor Residences</span><div class="related-name">The Carlyle Residences</div><div class="related-loc">Midtown East, New York · Now Selling</div></div>
+    </a>
+    <a href="project-detail.html" class="related-card">
+      <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&q=80" alt="Woodland Reserve" class="related-img">
+      <div class="related-overlay"><span class="related-type">Private Estate Community</span><div class="related-name">Woodland Reserve</div><div class="related-loc">Darien, Connecticut · Pre-Sale</div></div>
+    </a>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-band">
+  <div>
+    <h2>Begin Your Enquiry<br><em>for The Alderton</em></h2>
+    <p>Our sales team provides fully bespoke consultations and private showings by appointment. Discretion assured.</p>
+  </div>
+  <div class="cta-actions">
+    <a href="contact.html" class="btn-white">Request Information Pack</a>
+    <a href="contact.html" class="btn-outline-white">Schedule a Private Viewing</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <a href="luxury-dev-website.html" class="footer-logo">Meri<span>·</span>dian</a>
+    <div class="footer-links">
+      <div class="footer-col"><h4>Developments</h4><ul><li><a href="projects.html">Current Projects</a></li><li><a href="projects.html">Completed</a></li><li><a href="projects.html">Pre-Sale</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Meridian</a></li><li><a href="about.html">Leadership</a></li><li><a href="investors.html">Investors</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a href="contact.html">Sales Enquiries</a></li><li><a href="contact.html">Investor Enquiries</a></li><li><a href="contact.html">Careers</a></li></ul></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2024 Meridian Development Group. All rights reserved.</span>
+    <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  if (window.matchMedia('(pointer: fine)').matches) {
+    const cur = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
+    let mx=0, my=0, rx=0, ry=0;
+    document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+    document.querySelectorAll('a, button, [data-src], .g-thumb').forEach(el => {
+      el.addEventListener('mouseenter', () => { cur.classList.add('hover'); ring.classList.add('hover'); });
+      el.addEventListener('mouseleave', () => { cur.classList.remove('hover'); ring.classList.remove('hover'); });
+    });
+    (function loop(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+  }
+
+  // Hamburger
+  const hb = document.getElementById('hamburger'), mm = document.getElementById('mobileMenu');
+  hb.addEventListener('click', () => { hb.classList.toggle('open'); mm.classList.toggle('open'); document.body.style.overflow = mm.classList.contains('open') ? 'hidden' : ''; });
+  document.querySelectorAll('.mobile-link').forEach(l => l.addEventListener('click', () => { hb.classList.remove('open'); mm.classList.remove('open'); document.body.style.overflow = ''; }));
+
+  // Nav hide/show on scroll
+  let lastY = 0;
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > lastY && y > 200) nav.classList.add('hidden'); else nav.classList.remove('hidden');
+    if (y > 80) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+    lastY = y;
+  });
+
+  // Sticky enquiry bar
+  const enquiryBar = document.getElementById('enquiryBar');
+  const heroSection = document.getElementById('heroSection');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (!e.isIntersecting) enquiryBar.classList.add('visible'); else enquiryBar.classList.remove('visible'); });
+  }, { threshold: 0 });
+  io.observe(heroSection);
+
+  // Availability bar animate
+  const availFill = document.getElementById('availFill');
+  const availObs = new IntersectionObserver(entries => { if (entries[0].isIntersecting) { availFill.classList.add('animated'); availObs.disconnect(); } });
+  availObs.observe(availFill);
+
+  // Sticky bar active tab
+  const sections = document.querySelectorAll('[id]');
+  const ebTabs = document.querySelectorAll('.eb-tab');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    ebTabs.forEach(t => { t.classList.toggle('active', t.getAttribute('href') === '#'+current); });
+  });
+
+  // Floor plan tabs
+  document.querySelectorAll('.fp-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.fp-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.fp-content').forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('plan-' + tab.dataset.plan).classList.add('active');
+    });
+  });
+
+  // Lightbox
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const images = [];
+  let currentImg = 0;
+  document.querySelectorAll('[data-src]').forEach(el => {
+    images.push(el.dataset.src);
+    el.addEventListener('click', () => {
+      currentImg = images.indexOf(el.dataset.src);
+      lightboxImg.src = images[currentImg];
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', () => { lightbox.classList.remove('open'); document.body.style.overflow = ''; });
+  document.getElementById('lightboxPrev').addEventListener('click', () => { currentImg = (currentImg - 1 + images.length) % images.length; lightboxImg.src = images[currentImg]; });
+  document.getElementById('lightboxNext').addEventListener('click', () => { currentImg = (currentImg + 1) % images.length; lightboxImg.src = images[currentImg]; });
+  lightbox.addEventListener('click', e => { if (e.target === lightbox) { lightbox.classList.remove('open'); document.body.style.overflow = ''; } });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { lightbox.classList.remove('open'); document.body.style.overflow = ''; } if (e.key === 'ArrowLeft' && lightbox.classList.contains('open')) document.getElementById('lightboxPrev').click(); if (e.key === 'ArrowRight' && lightbox.classList.contains('open')) document.getElementById('lightboxNext').click(); });
+
+  // Scroll reveal
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80); });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>

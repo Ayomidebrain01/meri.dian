@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — MERIDIAN Development</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  :root{--black:#0d0d0d;--dark:#1c1c1c;--mid:#555;--gray:#888;--light-gray:#bbb;--border:#e4e4e4;--off-white:#f8f7f5;--white:#fff;--orange:#E8601C;--orange-light:#f0743a;--orange-pale:#fff4ee;--orange-dark:#c44e12;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--white);color:var(--black);font-family:'Poppins',sans-serif;font-weight:300;overflow-x:hidden;}
+  .cursor,.cursor-ring{display:none;}
+  @media(pointer:fine){body{cursor:none;}.cursor{display:block;position:fixed;width:8px;height:8px;background:var(--orange);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}.cursor-ring{display:block;position:fixed;width:34px;height:34px;border:1.5px solid rgba(232,96,28,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.15s ease;}}
+  nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 60px;height:72px;background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Montserrat',sans-serif;font-size:18px;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;color:var(--black);text-decoration:none;z-index:201;}
+  .nav-logo span{color:var(--orange);}
+  .nav-links{display:flex;gap:36px;list-style:none;}
+  .nav-links a{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:600;color:var(--mid);text-decoration:none;transition:color 0.25s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--orange);}
+  .nav-cta{font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;color:var(--white);background:var(--orange);padding:12px 28px;text-decoration:none;transition:background 0.25s;}
+  .nav-cta:hover{background:var(--orange-dark);}
+  .nav-hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;z-index:201;}
+  .nav-hamburger span{display:block;width:24px;height:2px;background:var(--black);transition:all 0.3s ease;}
+  .nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-hamburger.open span:nth-child(2){opacity:0;}
+  .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .mobile-menu{display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:var(--white);z-index:199;flex-direction:column;padding:40px 30px;overflow-y:auto;transform:translateX(100%);transition:transform 0.35s ease;}
+  .mobile-menu.open{transform:translateX(0);}
+  .mobile-menu li{list-style:none;border-bottom:1px solid var(--border);}
+  .mobile-menu li a{display:block;padding:18px 0;font-family:'Montserrat',sans-serif;font-size:16px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--black);text-decoration:none;}
+  .mobile-menu li a:hover{color:var(--orange);}
+  .mobile-menu .mobile-cta{margin-top:32px;background:var(--orange);color:var(--white);padding:16px;text-align:center;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;text-decoration:none;display:block;}
+  .section-tag{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.35em;text-transform:uppercase;font-weight:700;color:var(--orange);margin-bottom:18px;display:block;}
+  .section-title{font-family:'Montserrat',sans-serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;line-height:1.1;letter-spacing:-0.02em;}
+  .section-title em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;color:var(--orange);}
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity 0.75s ease,transform 0.75s ease;}
+  .reveal.visible{opacity:1;transform:translateY(0);}
+
+  /* HERO */
+  .page-hero{margin-top:72px;background:var(--off-white);padding:80px 60px;border-bottom:1px solid var(--border);}
+  .page-hero-label{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.38em;text-transform:uppercase;font-weight:700;color:var(--orange);display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+  .page-hero-label::before{content:'';width:28px;height:2px;background:var(--orange);display:block;}
+  .page-hero h1{font-family:'Montserrat',sans-serif;font-size:clamp(36px,5vw,72px);font-weight:700;line-height:1.05;letter-spacing:-0.02em;max-width:700px;}
+  .page-hero h1 em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;color:var(--orange);}
+  .page-hero-sub{font-size:15px;line-height:1.85;color:var(--gray);max-width:520px;margin-top:20px;}
+
+  /* MAIN CONTACT */
+  .contact-main{display:grid;grid-template-columns:1fr 1fr;min-height:700px;}
+  .contact-form-side{padding:80px 60px;background:var(--white);}
+  .contact-form-side h2{font-family:'Montserrat',sans-serif;font-size:clamp(24px,3vw,38px);font-weight:700;letter-spacing:-0.01em;margin-bottom:10px;}
+  .contact-form-side h2 em{font-style:italic;font-weight:300;font-family:'Poppins',sans-serif;color:var(--orange);}
+  .contact-form-side>p{font-size:14px;line-height:1.8;color:var(--gray);margin-bottom:40px;}
+
+  /* ENQUIRY TYPE TABS */
+  .enquiry-tabs{display:flex;gap:8px;margin-bottom:36px;flex-wrap:wrap;}
+  .etab{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;padding:9px 18px;border:1.5px solid var(--border);background:none;color:var(--mid);cursor:pointer;transition:all 0.25s;}
+  .etab.active,.etab:hover{background:var(--orange);color:var(--white);border-color:var(--orange);}
+
+  .contact-form{display:flex;flex-direction:column;gap:20px;max-width:500px;}
+  .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .form-field{display:flex;flex-direction:column;gap:8px;}
+  .form-field label{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;color:var(--mid);}
+  .form-field input,.form-field select,.form-field textarea{background:transparent;border:none;border-bottom:1.5px solid var(--border);padding:10px 0;color:var(--black);font-family:'Poppins',sans-serif;font-size:14px;font-weight:300;outline:none;transition:border-color 0.25s;width:100%;}
+  .form-field input::placeholder,.form-field textarea::placeholder{color:var(--light-gray);}
+  .form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--orange);}
+  .form-field textarea{resize:none;height:100px;}
+  .form-field select option{background:var(--white);color:var(--black);}
+  .form-consent{display:flex;gap:12px;align-items:flex-start;}
+  .form-consent input[type="checkbox"]{width:16px;height:16px;margin-top:2px;accent-color:var(--orange);flex-shrink:0;cursor:pointer;}
+  .form-consent label{font-size:12px;line-height:1.6;color:var(--gray);cursor:pointer;}
+  .form-consent label a{color:var(--orange);text-decoration:none;}
+  .form-submit{background:var(--orange);color:var(--white);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;padding:16px 40px;border:none;align-self:flex-start;cursor:pointer;transition:background 0.25s;}
+  .form-submit:hover{background:var(--orange-dark);}
+  .form-success{display:none;background:var(--orange-pale);border:1px solid rgba(232,96,28,0.2);padding:20px 24px;margin-top:8px;}
+  .form-success p{font-size:13px;color:var(--orange);font-weight:400;}
+
+  /* INFO SIDE */
+  .contact-info-side{background:var(--dark);padding:80px 60px;display:flex;flex-direction:column;}
+  .info-image{position:relative;margin-bottom:44px;}
+  .info-image img{width:100%;aspect-ratio:16/9;object-fit:cover;filter:brightness(0.5);}
+  .info-image-text{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:32px;}
+  .info-image-text h3{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:6px;}
+  .info-image-text p{font-size:13px;color:rgba(255,255,255,0.5);}
+
+  .info-blocks{display:flex;flex-direction:column;gap:0;flex:1;}
+  .info-block{padding:20px 0;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;gap:16px;align-items:flex-start;}
+  .info-block:last-child{border-bottom:none;}
+  .info-icon{width:40px;height:40px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;color:var(--white);}
+  .info-label{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--orange);margin-bottom:4px;}
+  .info-value{font-family:'Poppins',sans-serif;font-size:14px;color:rgba(255,255,255,0.8);font-weight:300;line-height:1.5;}
+  .info-sub{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;}
+
+  /* TEAM CONTACTS */
+  .team-contacts{padding:100px 60px;background:var(--off-white);}
+  .team-contacts-header{margin-bottom:52px;}
+  .team-contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+  .tc-card{background:var(--white);padding:36px 32px;position:relative;overflow:hidden;transition:box-shadow 0.3s;}
+  .tc-card:hover{box-shadow:0 8px 32px rgba(232,96,28,0.1);}
+  .tc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--border);transition:background 0.3s;}
+  .tc-card:hover::before{background:var(--orange);}
+  .tc-name{font-family:'Montserrat',sans-serif;font-size:17px;font-weight:700;color:var(--black);margin-bottom:4px;}
+  .tc-role{font-family:'Poppins',sans-serif;font-size:11px;color:var(--orange);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:16px;}
+  .tc-detail{display:flex;gap:10px;align-items:center;margin-bottom:8px;}
+  .tc-detail:last-child{margin-bottom:0;}
+  .tc-detail-icon{font-size:12px;color:var(--orange);width:16px;flex-shrink:0;}
+  .tc-detail-text{font-size:13px;color:var(--gray);}
+
+  /* OFFICES */
+  .offices{padding:100px 60px;background:var(--white);}
+  .offices-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;margin-top:52px;}
+  .office-card{position:relative;overflow:hidden;cursor:pointer;}
+  .office-img{width:100%;aspect-ratio:16/9;object-fit:cover;filter:brightness(0.6);transition:filter 0.4s;}
+  .office-card:hover .office-img{filter:brightness(0.4);}
+  .office-overlay{position:absolute;inset:0;padding:32px;display:flex;flex-direction:column;justify-content:flex-end;}
+  .office-city{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:4px;}
+  .office-role{font-family:'Poppins',sans-serif;font-size:11px;color:rgba(255,255,255,0.6);font-weight:300;}
+  .office-addr{font-family:'Poppins',sans-serif;font-size:13px;color:rgba(255,255,255,0.5);margin-top:8px;}
+  .office-tag{position:absolute;top:20px;left:20px;background:var(--orange);color:var(--white);font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;padding:5px 14px;}
+
+  /* SOCIAL */
+  .social-band{background:var(--dark);padding:60px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;}
+  .social-band h3{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:700;color:var(--white);}
+  .social-links{display:flex;gap:12px;}
+  .social-link{width:44px;height:44px;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;text-decoration:none;transition:all 0.3s;}
+  .social-link:hover{background:var(--orange);border-color:var(--orange);color:var(--white);}
+
+  footer{background:var(--dark);padding:60px 60px 36px;border-top:1px solid rgba(255,255,255,0.04);}
+  .footer-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:44px;flex-wrap:wrap;gap:36px;}
+  .footer-logo{font-family:'Montserrat',sans-serif;font-size:22px;font-weight:700;letter-spacing:0.28em;text-transform:uppercase;color:var(--white);text-decoration:none;}
+  .footer-logo span{color:var(--orange);}
+  .footer-links{display:flex;gap:48px;flex-wrap:wrap;}
+  .footer-col h4{font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;font-weight:700;color:var(--orange);margin-bottom:18px;}
+  .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .footer-col a{font-family:'Poppins',sans-serif;font-size:13px;color:#888;text-decoration:none;font-weight:300;transition:color 0.25s;}
+  .footer-col a:hover{color:var(--white);}
+  .footer-bottom{border-top:1px solid #2e2e2e;padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  .footer-copy{font-family:'Poppins',sans-serif;font-size:12px;color:#666;font-weight:300;}
+  .footer-legal{display:flex;gap:20px;}
+  .footer-legal a{font-family:'Poppins',sans-serif;font-size:12px;color:#666;text-decoration:none;transition:color 0.25s;}
+  .footer-legal a:hover{color:#aaa;}
+
+  @media(max-width:1100px){nav{padding:0 36px;}.nav-links{gap:24px;}.page-hero,.team-contacts,.offices,.social-band{padding-left:40px;padding-right:40px;}.contact-form-side,.contact-info-side{padding:60px 40px;}footer{padding:50px 40px 30px;}}
+  @media(max-width:900px){nav{padding:0 28px;}.nav-links,.nav-cta{display:none;}.nav-hamburger{display:flex;}.mobile-menu{display:flex;}.page-hero{padding:52px 28px;}.contact-main{grid-template-columns:1fr;}.contact-form-side,.contact-info-side{padding:60px 28px;}.team-contact-grid{grid-template-columns:1fr 1fr;}.offices-grid{grid-template-columns:1fr;}.social-band{padding:44px 28px;}.team-contacts,.offices{padding:72px 28px;}footer{padding:44px 28px 28px;}.footer-top{flex-direction:column;}.footer-links{gap:36px;}}
+  @media(max-width:600px){nav{height:64px;padding:0 20px;}.nav-logo{font-size:15px;}.mobile-menu{top:64px;}.page-hero{margin-top:64px;padding:40px 20px;}.contact-form-side,.contact-info-side{padding:48px 20px;}.form-row-2{grid-template-columns:1fr;}.team-contact-grid{grid-template-columns:1fr;}.team-contacts,.offices{padding:60px 20px;}.social-band{padding:36px 20px;flex-direction:column;align-items:flex-start;}footer{padding:36px 20px 24px;}.footer-links{flex-direction:column;gap:28px;}.footer-bottom{flex-direction:column;align-items:flex-start;}.offices-grid{gap:2px;}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="luxury-dev-website.html" class="nav-logo">Meri<span>·</span>dian</a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="process.html">Process</a></li>
+    <li><a href="investors.html">Investors</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta active">Enquire Now</a>
+  <button class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<ul class="mobile-menu" id="mobileMenu">
+  <li><a href="about.html" class="mobile-link">About</a></li>
+  <li><a href="projects.html" class="mobile-link">Projects</a></li>
+  <li><a href="process.html" class="mobile-link">Process</a></li>
+  <li><a href="investors.html" class="mobile-link">Investors</a></li>
+  <a href="contact.html" class="mobile-cta mobile-link">Enquire Now</a>
+</ul>
+
+<div class="page-hero">
+  <div class="page-hero-label">Reach Out</div>
+  <h1>Let's Start a<br><em>Conversation</em></h1>
+  <p class="page-hero-sub">Our team is available to discuss residential purchases, investment opportunities, and partnership enquiries — with complete discretion and personal attention.</p>
+</div>
+
+<!-- MAIN CONTACT -->
+<div class="contact-main reveal">
+  <div class="contact-form-side">
+    <h2>Send Us Your<br><em>Enquiry</em></h2>
+    <p>Complete the form below and a member of our team will respond within one business day.</p>
+    <div class="enquiry-tabs">
+      <button class="etab active">Residential Purchase</button>
+      <button class="etab">Investment</button>
+      <button class="etab">Private Viewing</button>
+      <button class="etab">Other</button>
+    </div>
+    <div class="contact-form">
+      <div class="form-row-2">
+        <div class="form-field"><label>First Name</label><input type="text" placeholder="Jonathan"></div>
+        <div class="form-field"><label>Last Name</label><input type="text" placeholder="Hale"></div>
+      </div>
+      <div class="form-field"><label>Email Address</label><input type="email" placeholder="jonathan@email.com"></div>
+      <div class="form-field"><label>Phone Number</label><input type="tel" placeholder="+1 (212) 555 0100"></div>
+      <div class="form-field">
+        <label>Property of Interest</label>
+        <select>
+          <option value="">Select a project…</option>
+          <option>The Alderton — Upper East Side</option>
+          <option>One Meridian — Tribeca</option>
+          <option>The Carlyle Residences — Midtown East</option>
+          <option>Woodland Reserve — Darien, CT</option>
+          <option>General Enquiry</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Budget Range</label>
+        <select>
+          <option value="">Select a range…</option>
+          <option>$2M – $5M</option>
+          <option>$5M – $10M</option>
+          <option>$10M – $20M</option>
+          <option>$20M+</option>
+        </select>
+      </div>
+      <div class="form-field"><label>Message</label><textarea placeholder="Tell us about your requirements or any questions you have…"></textarea></div>
+      <div class="form-consent">
+        <input type="checkbox" id="consent">
+        <label for="consent">I agree to Meridian Development Group's <a href="#">Privacy Policy</a> and consent to being contacted regarding my enquiry.</label>
+      </div>
+      <button class="form-submit" id="submitBtn">Submit Enquiry</button>
+      <div class="form-success" id="formSuccess"><p>✓ Thank you for your enquiry. A member of our team will be in touch within one business day.</p></div>
+    </div>
+  </div>
+
+  <div class="contact-info-side">
+    <div class="info-image">
+      <img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=900&q=80" alt="Meridian office">
+      <div class="info-image-text"><h3>432 Park Avenue</h3><p>New York, NY 10022</p></div>
+    </div>
+    <div class="info-blocks">
+      <div class="info-block">
+        <div class="info-icon">✦</div>
+        <div><div class="info-label">Main Office</div><div class="info-value">+1 (212) 555 0190</div><div class="info-sub">Mon – Fri, 9am – 6pm EST</div></div>
+      </div>
+      <div class="info-block">
+        <div class="info-icon">@</div>
+        <div><div class="info-label">Sales Enquiries</div><div class="info-value">sales@meridiandev.com</div><div class="info-sub">Response within 1 business day</div></div>
+      </div>
+      <div class="info-block">
+        <div class="info-icon">◈</div>
+        <div><div class="info-label">Investor Relations</div><div class="info-value">investors@meridiandev.com</div><div class="info-sub">Strictly confidential</div></div>
+      </div>
+      <div class="info-block">
+        <div class="info-icon">◆</div>
+        <div><div class="info-label">Press & Media</div><div class="info-value">press@meridiandev.com</div><div class="info-sub">Media kit available on request</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM CONTACTS -->
+<section class="team-contacts">
+  <div class="team-contacts-header reveal">
+    <span class="section-tag">Direct Contacts</span>
+    <h2 class="section-title">Speak With<br><em>Our Team</em></h2>
+  </div>
+  <div class="team-contact-grid reveal">
+    <div class="tc-card">
+      <div class="tc-name">Sophie Laurent</div>
+      <div class="tc-role">Head of Residential Sales</div>
+      <div class="tc-detail"><span class="tc-detail-icon">✦</span><span class="tc-detail-text">+1 (212) 555 0191</span></div>
+      <div class="tc-detail"><span class="tc-detail-icon">@</span><span class="tc-detail-text">s.laurent@meridiandev.com</span></div>
+      <div class="tc-detail"><span class="tc-detail-icon">◉</span><span class="tc-detail-text">Mon–Fri, 9am–7pm EST</span></div>
+    </div>
+    <div class="tc-card">
+      <div class="tc-name">Marcus Reid</div>
+      <div class="tc-role">CFO — Investor Relations</div>
+      <div class="tc-detail"><span class="tc-detail-icon">✦</span><span class="tc-detail-text">+1 (212) 555 0192</span></div>
+      <div class="tc-detail"><span class="tc-detail-icon">@</span><span class="tc-detail-text">m.reid@meridiandev.com</span></div>
+      <div class="tc-detail"><span class="tc-detail-icon">◉</span><span class="tc-detail-text">By appointment</span></div>
+    </div>
+    <div class="tc-card">
+      <div class="tc-name">Priya Mehta</div>
+      <div class="tc-role">Head of Development</div>
+      <div class="tc-detail"><span class="tc-detail-icon">✦</span><span class="tc-detail-text">+1 (212) 555 0193</span></div>
+      <div class="tc-detail"><span class="tc-detail-icon">@</span><span class="tc-detail-text">p.mehta@meridiandev.com</span></div>
+      <div class="tc-detail"><span class="tc-detail-icon">◉</span><span class="tc-detail-text">Partnership enquiries</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICES -->
+<section class="offices">
+  <div class="reveal">
+    <span class="section-tag">Find Us</span>
+    <h2 class="section-title">Our<br><em>Offices</em></h2>
+  </div>
+  <div class="offices-grid reveal">
+    <div class="office-card">
+      <img src="https://images.unsplash.com/photo-1534430480872-3498386e7856?w=900&q=80" alt="New York" class="office-img">
+      <div class="office-overlay">
+        <div class="office-city">New York</div>
+        <div class="office-role">Global Headquarters</div>
+        <div class="office-addr">432 Park Avenue, Suite 5400<br>New York, NY 10022</div>
+      </div>
+      <div class="office-tag">HQ</div>
+    </div>
+    <div class="office-card">
+      <img src="https://images.unsplash.com/photo-1565372195458-9de0b320ef04?w=900&q=80" alt="Greenwich" class="office-img">
+      <div class="office-overlay">
+        <div class="office-city">Greenwich</div>
+        <div class="office-role">Connecticut Sales Office</div>
+        <div class="office-addr">1 Greenwich Plaza, Suite 300<br>Greenwich, CT 06830</div>
+      </div>
+      <div class="office-tag">Sales</div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<div class="social-band reveal">
+  <h3>Follow Meridian</h3>
+  <div class="social-links">
+    <a href="#" class="social-link">Li</a>
+    <a href="#" class="social-link">Ig</a>
+    <a href="#" class="social-link">Tw</a>
+    <a href="#" class="social-link">Yt</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <a href="luxury-dev-website.html" class="footer-logo">Meri<span>·</span>dian</a>
+    <div class="footer-links">
+      <div class="footer-col"><h4>Developments</h4><ul><li><a href="projects.html">Current Projects</a></li><li><a href="projects.html">Completed</a></li><li><a href="projects.html">Pre-Sale</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="about.html">About Meridian</a></li><li><a href="about.html">Leadership</a></li><li><a href="investors.html">Investors</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a href="contact.html">Sales Enquiries</a></li><li><a href="contact.html">Investor Enquiries</a></li><li><a href="contact.html">Careers</a></li></ul></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2024 Meridian Development Group. All rights reserved.</span>
+    <div class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div>
+  </div>
+</footer>
+
+<script>
+  if(window.matchMedia('(pointer: fine)').matches){const c=document.getElementById('cursor'),r=document.getElementById('cursorRing');let mx=0,my=0,rx=0,ry=0;document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;c.style.left=mx+'px';c.style.top=my+'px';});(function loop(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;r.style.left=rx+'px';r.style.top=ry+'px';requestAnimationFrame(loop);})();}
+  const hb=document.getElementById('hamburger'),mm=document.getElementById('mobileMenu');
+  hb.addEventListener('click',()=>{hb.classList.toggle('open');mm.classList.toggle('open');document.body.style.overflow=mm.classList.contains('open')?'hidden':'';});
+  document.querySelectorAll('.mobile-link').forEach(l=>l.addEventListener('click',()=>{hb.classList.remove('open');mm.classList.remove('open');document.body.style.overflow='';}));
+  document.querySelectorAll('.etab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.etab').forEach(t=>t.classList.remove('active'));tab.classList.add('active');}));
+  document.getElementById('submitBtn').addEventListener('click',()=>{document.getElementById('formSuccess').style.display='block';});
+  const obs=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);}),{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
